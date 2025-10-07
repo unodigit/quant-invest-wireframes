@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - Quant Invest</title>
+
+  <!-- iOS-optimized Font Stack (System fonts + Inter fallback) -->
+  <link rel="preconnect" href="https://rsms.me/">
+  <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+  <link rel="stylesheet" href="../css/main.css">
+
+</head>
+<body class="bg-gray-50 font-sans">
+
+  <main id="dashboard-content" class="min-h-screen p-4 md:p-6">
+    <!-- Content will be rendered here -->
+  </main>
+
+  <script type="module">
+    import { getCurrentUser, getPortfolioByUserId, getStrategiesByIds, formatCurrency, formatPercentage, calculatePerformanceChange } from '../js/data.js';
+    import { StatCard, AlertBanner } from '../js/ui.js';
+    import { renderSimpleLineChart } from '../js/charts.js';
+    import { t } from '../js/i18n.js';
+
+    // Get data
+    const user = getCurrentUser();
+    const portfolio = getPortfolioByUserId(user.id);
+    const strategies = getStrategiesByIds(portfolio.strategies);
+
+    // Calculate performance change
+    const perfChange1M = calculatePerformanceChange(portfolio.performanceHistory, 30);
+
+    const PERIODS = ['1D', '1W', '1M', '1Y', 'ALL'];
+    const PERIOD_LIMITS = {
+      '1D': 2,
+      '1W': 7,
+      '1M': 30,
+      '1Y': 365
+    };
+    const defaultPeriod = '1M';
+    let currentPeriod = defaultPeriod;
+    let performanceChartCanvas = null;
+
+    const performanceChartOptions = {
+      lineColor: '#00C49A',
+      fillColor: 'rgba(0, 196, 154, 0.12)',
+      yFormatter: (value) => `$${value.toLocaleString(undefined, { maximumFractionDigits: 0 })}`
+    };
+
+    // Render dashboard
+    function renderDashboard() {
+      const content = document.getElementById('dashboard-content');
+
+      // KYC Pending Alert
+      const kycAlert = user.kycStatus === 'pending' ? `
+        <div class="mb-6">
+          ${AlertBanner({
+            message: t('dashboard.kycPending'),
+            type: 'warning',
+            dismissible: false
+          })}
+        </div>
+      ` : '';
+
+      // Hero Stat
+      const heroStat = StatCard({
+        title: t('dashboard.totalPortfolio'),
+        value: formatCurrency(portfolio.totalValueAUD),
+        trend: formatPercentage(perfChange1M),
+        color: 'text-accent'
+      });
+
+      // Strategy Cards
+      const strategyCardsHtml = strategies.length > 0 ? `
+        <h2 class="text-lg font-semibold text-gray-900 mt-8 mb-4">${t('dashboard.yourStrategies')}</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          ${strategies.map(s => StatCard({
+            title: s.name,
+            value: formatCurrency(s.allocatedAmount),
+            trend: formatPercentage(s.returnTotal),
+            color: s.returnTotal >= 0 ? 'text-accent' : 'text-error'
+          })).join('')}
+        </div>
+      ` : `
+        <div class="text-center py-12 bg-white rounded-lg shadow-sm mt-8">
+          <p class="text-gray-500 mb-4">${t('dashboard.noStrategies')}</p>
+          <a href="#/allocate/select" class="inline-block px-6 py-3 bg-accent text-white font-semibold rounded-lg hover:bg-accent/90 transition-colors">
+            ${t('dashboard.allocateFunds')}
+          </a>
+        </div>
+      `;
+
+      // CTAs
+      const ctasHtml = strategies.length > 0 ? `
+        <div class="flex gap-4 mt-8">
+          <a href="#/allocate/select" class="px-6 py-3 bg-accent text-white font-semibold rounded-lg hover:bg-accent/90 focus:outline-none focus:ring-2 focus:ring-accent transition-colors">
+            ${t('dashboard.allocateFunds')}
+          </a>
+          <a href="#/deposit" class="px-6 py-3 bg-white text-primary font-semibold rounded-lg border-2 border-primary hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-accent transition-colors">
+            ${t('dashboard.deposit')}
+          </a>
+        </div>
+      ` : '';
+
+      const periodButtonsHtml = PERIODS.map((periodKey) => {
+        const isActive = periodKey === currentPeriod;
+        const baseClass = 'chart-period-button px-3 py-1 rounded text-sm font-medium hover:bg-primary hover:text-white focus:outline-none focus:ring-2 focus:ring-accent transition-colors';
+        const stateClass = isActive ? 'bg-primary text-white' : 'bg-gray-100 text-gray-700';
+        return `<button type="button" data-chart-period="${periodKey}" aria-pressed="${isActive}" class="${baseClass} ${stateClass}">${periodKey}</button>`;
+      }).join('');
+
+      content.innerHTML = `
+        ${kycAlert}
+        ${heroStat}
+        <div class="mt-6 bg-white rounded-lg p-6 shadow-sm border border-gray-200">
+          <div class="flex gap-2 mb-4">
+            ${periodButtonsHtml}
+          </div>
+          <canvas id="performance-chart" width="800" height="300" aria-label="Portfolio performance chart"></canvas>
+        </div>
+        ${strategyCardsHtml}
+        ${ctasHtml}
+      `;
+
+      // Attach handlers after rendering buttons
+      attachPeriodButtonHandlers(content);
+      setActivePeriodButton(currentPeriod);
+
+      // Render chart
+      renderChart();
+    }
+
+    function attachPeriodButtonHandlers(container) {
+      container.querySelectorAll('[data-chart-period]').forEach((button) => {
+        button.addEventListener('click', () => {
+          const { chartPeriod } = button.dataset;
+          if (chartPeriod) {
+            updateChartPeriod(chartPeriod);
+          }
+        });
+      });
+    }
+
+    function setActivePeriodButton(period) {
+      document.querySelectorAll('[data-chart-period]').forEach((button) => {
+        const isActive = button.dataset.chartPeriod === period;
+        button.classList.toggle('bg-primary', isActive);
+        button.classList.toggle('text-white', isActive);
+        button.classList.toggle('bg-gray-100', !isActive);
+        button.classList.toggle('text-gray-700', !isActive);
+        button.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+      });
+    }
+
+    function getPeriodData(period) {
+      const history = portfolio.performanceHistory;
+      if (!history || history.length === 0) {
+        return { labels: [], values: [] };
+      }
+
+      if (period === 'ALL') {
+        return {
+          labels: history.map((entry) => new Date(entry.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })),
+          values: history.map((entry) => entry.value)
+        };
+      }
+
+      const limit = PERIOD_LIMITS[period] ?? history.length;
+      const slice = history.slice(-Math.max(1, Math.min(limit, history.length)));
+      return {
+        labels: slice.map((entry) => new Date(entry.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })),
+        values: slice.map((entry) => entry.value)
+      };
+    }
+
+    // Render chart
+    function renderChart() {
+      const canvas = document.getElementById('performance-chart');
+      if (!canvas) return;
+
+      performanceChartCanvas = canvas;
+      const { labels, values } = getPeriodData(currentPeriod);
+      renderSimpleLineChart(canvas, labels, values, performanceChartOptions);
+    }
+
+    function updateChartDataset(period) {
+      if (!performanceChartCanvas) {
+        return;
+      }
+
+      const { labels, values } = getPeriodData(period);
+      renderSimpleLineChart(performanceChartCanvas, labels, values, performanceChartOptions);
+    }
+
+    window.updateChartPeriod = function(period) {
+      if (!PERIODS.includes(period)) {
+        return;
+      }
+
+      if (period === currentPeriod) {
+        return;
+      }
+
+      currentPeriod = period;
+      setActivePeriodButton(period);
+      updateChartDataset(period);
+    };
+
+    // Listen for language changes
+    window.addEventListener('languagechange', () => {
+      location.reload();
+    });
+
+    // Render on load
+    renderDashboard();
+  </script>
+</body>
+</html>

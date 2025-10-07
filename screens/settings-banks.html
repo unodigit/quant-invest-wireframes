@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bank Accounts - Quant Invest</title>
+
+  <!-- iOS-optimized Font Stack (System fonts + Inter fallback) -->
+  <link rel="preconnect" href="https://rsms.me/">
+  <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+  <link rel="stylesheet" href="../css/main.css">
+
+</head>
+<body class="bg-gray-50 font-sans">
+
+  <main id="banks-content" class="min-h-screen p-4 md:p-6">
+    <!-- Content will be rendered here -->
+  </main>
+
+  <script type="module">
+    import { mockData, safeString } from '../js/data.js';
+    import { addBankAccount } from '../js/interactions.js';
+    import { t } from '../js/i18n.js';
+
+    function renderBanks() {
+      const content = document.getElementById('banks-content');
+
+      // Back button
+      const backButton = `
+        <a href="#/settings" class="inline-flex items-center text-accent hover:underline mb-6">
+          <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+          </svg>
+          ${t('common.back')}
+        </a>
+      `;
+
+      // Title
+      const titleHtml = `
+        <h1 class="text-2xl font-bold text-primary mb-6">${t('settings.linkedAccounts')}</h1>
+      `;
+
+      // Existing bank accounts
+      const bankAccountsHtml = mockData.bankAccounts.map(bank => {
+        const accountName = safeString(bank.holderName || bank.accountName, 'Bank Account');
+        const bsb = safeString(bank.bsb, '000-000');
+        const accountNumber = safeString(bank.accountNumber, '0000');
+        const accountType = safeString(bank.accountType, 'Unknown');
+        const lastFour = accountNumber.length >= 4 ? accountNumber.slice(-4) : accountNumber;
+        
+        return `
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200">
+          <div class="p-6">
+            <div class="flex items-start justify-between mb-4">
+              <div class="flex items-center flex-1">
+                <div class="w-10 h-10 bg-accent/10 rounded-lg flex items-center justify-center mr-3 flex-shrink-0">
+                  <svg class="w-6 h-6 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
+                  </svg>
+                </div>
+                <h3 class="text-lg font-semibold text-primary">${accountName}</h3>
+              </div>
+              <button
+                onclick="alert('Remove bank account functionality coming soon')"
+                class="text-error hover:bg-red-50 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors"
+              >
+                ${t('common.delete')}
+              </button>
+            </div>
+            
+            <div class="space-y-3 pl-13">
+              <div class="flex items-start">
+                <dt class="text-sm text-gray-500 w-32 flex-shrink-0">${t('banking.bsb')}</dt>
+                <dd class="text-sm font-medium text-gray-900">${bsb}</dd>
+              </div>
+              <div class="flex items-start">
+                <dt class="text-sm text-gray-500 w-32 flex-shrink-0">${t('banking.accountNumber')}</dt>
+                <dd class="text-sm font-medium text-gray-900">•••• ${lastFour}</dd>
+              </div>
+              <div class="flex items-start">
+                <dt class="text-sm text-gray-500 w-32 flex-shrink-0">${t('settings.accountType')}</dt>
+                <dd class="text-sm font-medium text-gray-900 capitalize">${accountType === 'savings' ? t('settings.savings') : accountType === 'checking' ? t('settings.checking') : accountType}</dd>
+              </div>
+              <div class="flex items-start">
+                <dt class="text-sm text-gray-500 w-32 flex-shrink-0">${t('history.status')}</dt>
+                <dd>
+                  ${bank.verified
+                    ? `<span class="inline-flex px-2.5 py-1 text-xs font-semibold rounded-md bg-green-100 text-green-800">${t('history.completed')}</span>`
+                    : `<span class="inline-flex px-2.5 py-1 text-xs font-semibold rounded-md bg-yellow-100 text-yellow-800">${t('history.pending')}</span>`}
+                </dd>
+              </div>
+            </div>
+          </div>
+        </div>
+      `}).join('');
+
+      // Add new bank account button
+      const addButtonHtml = `
+        <button
+          onclick="toggleAddForm()"
+          class="w-full bg-white rounded-lg p-6 shadow-sm border-2 border-dashed border-gray-300 hover:border-accent hover:bg-gray-50 transition-all focus:outline-none focus:ring-2 focus:ring-accent"
+        >
+          <div class="flex items-center justify-center">
+            <svg class="w-6 h-6 text-accent mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+            </svg>
+            <span class="text-accent font-semibold">${t('settings.addBankAccount')}</span>
+          </div>
+        </button>
+      `;
+
+      // Add bank form (hidden by default)
+      const addFormHtml = `
+        <div id="add-bank-form" class="hidden max-w-2xl bg-white rounded-lg p-8 shadow-sm border border-gray-200 mt-6">
+          <h2 class="text-lg font-semibold text-primary mb-6">Add New Bank Account</h2>
+
+          <form id="bank-form" class="space-y-4">
+            <div>
+              <label for="accountName" class="block text-sm font-medium text-gray-700 mb-2">
+                Account Name
+              </label>
+              <input
+                type="text"
+                id="accountName"
+                name="accountName"
+                required
+                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent"
+                placeholder="My Savings Account"
+              />
+            </div>
+
+            <div>
+              <label for="bsb" class="block text-sm font-medium text-gray-700 mb-2">
+                BSB
+              </label>
+              <input
+                type="text"
+                id="bsb"
+                name="bsb"
+                required
+                pattern="[0-9]{3}-?[0-9]{3}"
+                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent"
+                placeholder="123-456"
+              />
+            </div>
+
+            <div>
+              <label for="accountNumber" class="block text-sm font-medium text-gray-700 mb-2">
+                Account Number
+              </label>
+              <input
+                type="text"
+                id="accountNumber"
+                name="accountNumber"
+                required
+                pattern="[0-9]{6,10}"
+                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent"
+                placeholder="12345678"
+              />
+            </div>
+
+            <div>
+              <label for="accountType" class="block text-sm font-medium text-gray-700 mb-2">
+                ${t('settings.accountType')}
+              </label>
+              <select
+                id="accountType"
+                name="accountType"
+                required
+                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent"
+              >
+                <option value="">Select account type</option>
+                <option value="savings">${t('settings.savings')}</option>
+                <option value="checking">${t('settings.checking')}</option>
+              </select>
+            </div>
+
+            <div class="bg-blue-50 border-l-4 border-blue-400 p-4">
+              <p class="text-sm text-blue-700">
+                Your bank account will be verified within 1-2 business days. You will receive a small deposit for verification purposes.
+              </p>
+            </div>
+
+            <div class="flex gap-4 pt-4 border-t border-gray-200">
+              <button
+                type="button"
+                onclick="toggleAddForm()"
+                class="flex-1 px-6 py-3 bg-white text-primary font-semibold rounded-lg border-2 border-primary hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-accent transition-colors"
+              >
+                ${t('common.cancel')}
+              </button>
+              <button
+                type="submit"
+                class="flex-1 px-6 py-3 bg-accent text-white font-semibold rounded-lg hover:bg-accent/90 focus:outline-none focus:ring-2 focus:ring-accent transition-colors"
+              >
+                Add Account
+              </button>
+            </div>
+          </form>
+        </div>
+      `;
+
+      content.innerHTML = `
+        ${backButton}
+        ${titleHtml}
+        <div class="max-w-2xl space-y-4">
+          ${bankAccountsHtml}
+          ${addButtonHtml}
+        </div>
+        ${addFormHtml}
+      `;
+
+      // Attach form handler
+      document.getElementById('bank-form').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+        const bankData = {
+          accountName: formData.get('accountName'),
+          bsb: formData.get('bsb'),
+          accountNumber: formData.get('accountNumber'),
+          accountType: formData.get('accountType')
+        };
+        addBankAccount(bankData);
+      });
+    }
+
+    // Toggle add form visibility
+    window.toggleAddForm = function() {
+      const form = document.getElementById('add-bank-form');
+      form.classList.toggle('hidden');
+    };
+
+    // Make addBankAccount globally available
+    window.addBankAccount = addBankAccount;
+
+    // Listen for language changes
+    window.addEventListener('languagechange', () => {
+      location.reload();
+    });
+
+    // Render on load
+    renderBanks();
+  </script>
+</body>
+</html>

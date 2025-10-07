@@ -1,0 +1,782 @@
+/* ============================================
+   iOS Enhancements - Apple-Quality Features
+   Based on Apple HIG 2024
+   ============================================ */
+
+/* ============================================
+   1. Loading States & Skeleton Screens
+   ============================================ */
+
+@keyframes shimmer {
+  0% { background-position: -1000px 0; }
+  100% { background-position: 1000px 0; }
+}
+
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    rgba(0, 0, 0, 0.04) 25%,
+    rgba(0, 0, 0, 0.08) 50%,
+    rgba(0, 0, 0, 0.04) 75%
+  );
+  background-size: 1000px 100%;
+  animation: shimmer 2s infinite linear;
+  border-radius: var(--ios-radius-medium);
+  pointer-events: none;
+}
+
+.skeleton-text {
+  height: 17px;
+  margin-bottom: 8px;
+  border-radius: 4px;
+}
+
+.skeleton-heading {
+  height: 28px;
+  width: 60%;
+  margin-bottom: 16px;
+  border-radius: 6px;
+}
+
+.skeleton-card {
+  height: 200px;
+  border-radius: var(--ios-radius-card);
+}
+
+.skeleton-circle {
+  border-radius: 50%;
+}
+
+/* Loading Spinner (iOS Style) */
+.spinner-ios {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--ios-fill);
+  border-top-color: var(--ios-primary);
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.spinner-large {
+  width: 36px;
+  height: 36px;
+  border-width: 3px;
+}
+
+/* ============================================
+   2. Form Validation & Errors
+   ============================================ */
+
+.input-error {
+  border-color: var(--ios-red) !important;
+  animation: shake 0.4s cubic-bezier(0.36, 0.07, 0.19, 0.97);
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-8px); }
+  20%, 40%, 60%, 80% { transform: translateX(8px); }
+}
+
+.error-message {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 6px;
+  font-size: var(--ios-font-size-caption1);
+  color: var(--ios-red);
+  animation: fadeInDown 0.3s var(--ios-easing-default);
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.input-success {
+  border-color: var(--ios-green) !important;
+}
+
+.success-message {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 6px;
+  font-size: var(--ios-font-size-caption1);
+  color: var(--ios-green);
+  animation: fadeInDown 0.3s var(--ios-easing-default);
+}
+
+/* ============================================
+   3. Toast Notifications (iOS Style)
+   ============================================ */
+
+.toast-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 9999;
+  padding: 0 16px;
+  padding-top: max(16px, env(safe-area-inset-top));
+  pointer-events: none;
+}
+
+.toast-ios {
+  position: relative;
+  max-width: 600px;
+  margin: 0 auto 12px;
+  background: rgba(58, 58, 60, 0.95);
+  backdrop-filter: saturate(180%) blur(20px);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  border-radius: 13px;
+  padding: 16px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  pointer-events: auto;
+  animation: slideDown 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.toast-ios.toast-success {
+  background: rgba(52, 199, 89, 0.95);
+}
+
+.toast-ios.toast-error {
+  background: rgba(255, 59, 48, 0.95);
+}
+
+.toast-ios.toast-warning {
+  background: rgba(255, 204, 0, 0.95);
+  color: #000;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.toast-ios.toast-exit {
+  animation: slideUp 0.3s var(--ios-easing-default) forwards;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-100%);
+  }
+}
+
+.toast-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: white;
+  font-size: var(--ios-font-size-subhead);
+  font-weight: 500;
+  letter-spacing: -0.24px;
+}
+
+.toast-icon {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+}
+
+.toast-message {
+  flex: 1;
+}
+
+/* ============================================
+   4. Empty States
+   ============================================ */
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 48px 24px;
+  min-height: 400px;
+}
+
+.empty-state-icon {
+  width: 80px;
+  height: 80px;
+  margin-bottom: 24px;
+  color: var(--ios-label-quaternary);
+  opacity: 0.5;
+}
+
+.empty-state-title {
+  font-size: var(--ios-font-size-title2);
+  font-weight: 600;
+  color: var(--ios-label);
+  margin-bottom: 8px;
+  letter-spacing: 0.35px;
+}
+
+.empty-state-message {
+  font-size: var(--ios-font-size-body);
+  color: var(--ios-label-secondary);
+  margin-bottom: 24px;
+  max-width: 400px;
+  line-height: var(--ios-line-height-relaxed);
+}
+
+.empty-state-action {
+  margin-top: 16px;
+}
+
+/* ============================================
+   5. Input Focus Management
+   ============================================ */
+
+input:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+  border-color: var(--ios-primary);
+  box-shadow: 0 0 0 4px rgba(0, 122, 255, 0.1);
+  transition: all 0.2s var(--ios-easing-default);
+}
+
+/* Auto-filled inputs */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 1000px var(--ios-fill-tertiary) inset;
+  -webkit-text-fill-color: var(--ios-label);
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+/* ============================================
+   6. Dark Mode Support
+   ============================================ */
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --ios-background: #000000;
+    --ios-background-secondary: #1C1C1E;
+    --ios-background-tertiary: #2C2C2E;
+    
+    --ios-card: #1C1C1E;
+    --ios-card-grouped: #000000;
+    
+    --ios-label: #FFFFFF;
+    --ios-label-secondary: rgba(235, 235, 245, 0.6);
+    --ios-label-tertiary: rgba(235, 235, 245, 0.3);
+    --ios-label-quaternary: rgba(235, 235, 245, 0.18);
+    
+    --ios-fill: rgba(120, 120, 128, 0.36);
+    --ios-fill-secondary: rgba(120, 120, 128, 0.32);
+    --ios-fill-tertiary: rgba(118, 118, 128, 0.24);
+    --ios-fill-quaternary: rgba(116, 116, 128, 0.18);
+    
+    --ios-separator: rgba(84, 84, 88, 0.6);
+    --ios-separator-opaque: #38383A;
+    
+    --ios-primary: #0A84FF;
+    --ios-green: #30D158;
+    --ios-red: #FF453A;
+    --ios-yellow: #FFD60A;
+    --ios-orange: #FF9F0A;
+  }
+
+  .skeleton {
+    background: linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.04) 25%,
+      rgba(255, 255, 255, 0.08) 50%,
+      rgba(255, 255, 255, 0.04) 75%
+    );
+  }
+}
+
+/* ============================================
+   7. Modal Sheets (iOS Bottom Sheet)
+   ============================================ */
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  z-index: 1000;
+  opacity: 0;
+  transition: opacity 0.3s var(--ios-easing-default);
+}
+
+.modal-overlay.active {
+  opacity: 1;
+}
+
+.modal-sheet {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--ios-card);
+  border-radius: 16px 16px 0 0;
+  max-height: 90vh;
+  overflow: hidden;
+  z-index: 1001;
+  transform: translateY(100%);
+  transition: transform 0.4s cubic-bezier(0.32, 0.72, 0, 1);
+  box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.3);
+}
+
+.modal-sheet.active {
+  transform: translateY(0);
+}
+
+.modal-handle {
+  width: 36px;
+  height: 5px;
+  background: var(--ios-separator);
+  border-radius: 3px;
+  margin: 12px auto;
+}
+
+.modal-sheet-content {
+  padding: 0 16px 32px;
+  max-height: calc(90vh - 29px);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* ============================================
+   8. Micro-interactions
+   ============================================ */
+
+.tap-highlight {
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
+  tap-highlight-color: rgba(0, 0, 0, 0.1);
+}
+
+button:active,
+.button:active,
+a:active,
+.list-item:active {
+  transform: scale(0.97);
+  opacity: 0.85;
+  transition: transform 0.1s var(--ios-easing-default);
+}
+
+.ripple {
+  position: relative;
+  overflow: hidden;
+}
+
+.ripple::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.ripple:active::after {
+  width: 300px;
+  height: 300px;
+}
+
+/* ============================================
+   9. Page Transitions
+   ============================================ */
+
+.page-enter {
+  animation: slideInRight 0.35s cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+.page-exit {
+  animation: slideOutLeft 0.35s cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideOutLeft {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(-30%);
+  }
+}
+
+.fade-enter {
+  animation: fadeIn 0.3s var(--ios-easing-default);
+}
+
+.fade-exit {
+  animation: fadeOut 0.3s var(--ios-easing-default);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+/* ============================================
+   10. Safe Area Handling
+   ============================================ */
+
+.safe-top {
+  padding-top: max(16px, env(safe-area-inset-top));
+}
+
+.safe-bottom {
+  padding-bottom: max(16px, env(safe-area-inset-bottom));
+}
+
+.safe-left {
+  padding-left: max(16px, env(safe-area-inset-left));
+}
+
+.safe-right {
+  padding-right: max(16px, env(safe-area-inset-right));
+}
+
+/* ============================================
+   11. Pull-to-Refresh
+   ============================================ */
+
+.pull-refresh-indicator {
+  position: absolute;
+  top: -60px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: top 0.3s var(--ios-easing-default);
+}
+
+.pull-refresh-indicator.visible {
+  top: 20px;
+}
+
+/* ============================================
+   12. Swipe Gestures
+   ============================================ */
+
+.swipeable {
+  position: relative;
+  overflow: hidden;
+  touch-action: pan-y;
+}
+
+.swipe-actions {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  transform: translateX(100%);
+  transition: transform 0.3s var(--ios-easing-default);
+}
+
+.swipeable.swiped .swipe-actions {
+  transform: translateX(0);
+}
+
+.swipe-action {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 24px;
+  color: white;
+  font-weight: 600;
+  font-size: var(--ios-font-size-subhead);
+  cursor: pointer;
+  user-select: none;
+}
+
+.swipe-action.delete {
+  background: var(--ios-red);
+}
+
+.swipe-action.archive {
+  background: var(--ios-orange);
+}
+
+/* ============================================
+   13. iOS-Style Search
+   ============================================ */
+
+.search-bar-ios {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: var(--ios-background);
+  transition: all 0.3s var(--ios-easing-default);
+}
+
+.search-input-wrapper {
+  position: relative;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  background: var(--ios-fill);
+  border-radius: 10px;
+  padding: 8px 32px 8px 32px;
+  transition: all 0.3s var(--ios-easing-default);
+}
+
+.search-input-wrapper.focused {
+  background: var(--ios-card);
+  box-shadow: 0 0 0 1px var(--ios-separator);
+}
+
+.search-icon {
+  position: absolute;
+  left: 10px;
+  width: 16px;
+  height: 16px;
+  color: var(--ios-label-tertiary);
+}
+
+.search-input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  font-size: var(--ios-font-size-body);
+  color: var(--ios-label);
+  outline: none;
+}
+
+.search-clear {
+  position: absolute;
+  right: 10px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--ios-label-tertiary);
+  color: white;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.search-input:not(:placeholder-shown) ~ .search-clear {
+  display: flex;
+}
+
+.search-cancel {
+  color: var(--ios-primary);
+  font-size: var(--ios-font-size-body);
+  font-weight: 400;
+  cursor: pointer;
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateX(20px);
+  transition: all 0.3s var(--ios-easing-default);
+  pointer-events: none;
+}
+
+.search-bar-ios.active .search-cancel {
+  opacity: 1;
+  transform: translateX(0);
+  pointer-events: auto;
+}
+
+/* ============================================
+   14. Action Sheets
+   ============================================ */
+
+.action-sheet {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1001;
+  padding: 0 8px 8px;
+  padding-bottom: max(8px, env(safe-area-inset-bottom));
+  transform: translateY(100%);
+  transition: transform 0.4s cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+.action-sheet.active {
+  transform: translateY(0);
+}
+
+.action-sheet-actions {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: 13px;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+
+.action-sheet-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  font-size: var(--ios-font-size-title3);
+  color: var(--ios-primary);
+  border-bottom: 0.5px solid var(--ios-separator);
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.2s;
+}
+
+.action-sheet-item:last-child {
+  border-bottom: none;
+}
+
+.action-sheet-item:active {
+  background: var(--ios-fill-quaternary);
+}
+
+.action-sheet-item.destructive {
+  color: var(--ios-red);
+  font-weight: 600;
+}
+
+.action-sheet-cancel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  font-size: var(--ios-font-size-title3);
+  font-weight: 600;
+  color: var(--ios-primary);
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: 13px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.action-sheet-cancel:active {
+  background: rgba(255, 255, 255, 0.85);
+}
+
+/* ============================================
+   15. Offline Indicator
+   ============================================ */
+
+.offline-banner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: rgba(88, 86, 214, 0.95);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  color: white;
+  text-align: center;
+  padding: 12px;
+  padding-top: max(12px, env(safe-area-inset-top));
+  font-size: var(--ios-font-size-footnote);
+  font-weight: 500;
+  z-index: 9998;
+  transform: translateY(-100%);
+  transition: transform 0.3s var(--ios-easing-default);
+}
+
+.offline-banner.visible {
+  transform: translateY(0);
+}
+
+/* ============================================
+   16. Accessibility Enhancements
+   ============================================ */
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* Focus visible for keyboard navigation */
+*:focus-visible {
+  outline: 2px solid var(--ios-primary);
+  outline-offset: 2px;
+}
+
+/* Reduce motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  * {
+    border-width: 2px !important;
+  }
+  
+  button,
+  a {
+    text-decoration: underline;
+  }
+}

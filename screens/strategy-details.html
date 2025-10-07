@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Strategy Details - Quant Invest</title>
+
+  <!-- iOS-optimized Font Stack (System fonts + Inter fallback) -->
+  <link rel="preconnect" href="https://rsms.me/">
+  <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+  <link rel="stylesheet" href="../css/main.css">
+
+</head>
+<body class="bg-gray-50 font-sans">
+
+  <main id="strategy-content" class="min-h-screen p-4 md:p-6">
+    <!-- Content will be rendered here -->
+  </main>
+
+  <script type="module">
+    import { mockData, formatCurrency, formatPercentage } from '../js/data.js';
+    import { StatCard, DataTable } from '../js/ui.js';
+    import { renderSimpleLineChart } from '../js/charts.js';
+    import { t } from '../js/i18n.js';
+
+    // Get strategy ID from URL hash (e.g., #/strategy/strat-001)
+    const hash = window.location.hash;
+    const strategyId = hash.split('/')[2] || 'strat-001';
+    const strategy = mockData.strategies.find(s => s.id === strategyId);
+
+    if (!strategy) {
+      document.getElementById('strategy-content').innerHTML = `
+        <div class="text-center py-12">
+          <p class="text-gray-500">Strategy not found</p>
+          <a href="#/dashboard" class="text-accent hover:underline mt-4 inline-block">Back to Dashboard</a>
+        </div>
+      `;
+    } else {
+      renderStrategyDetails();
+    }
+
+    function renderStrategyDetails() {
+      const content = document.getElementById('strategy-content');
+
+      // Back button
+      const backButton = `
+        <a href="#/dashboard" class="inline-flex items-center text-accent hover:underline mb-6">
+          <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+          </svg>
+          ${t('common.back')}
+        </a>
+      `;
+
+      // Strategy header
+      const header = `
+        <div class="mb-8">
+          <h1 class="text-3xl font-bold text-primary">${strategy.name}</h1>
+          <p class="text-gray-600 mt-2">${strategy.description}</p>
+        </div>
+      `;
+
+      // Performance metrics
+      const metricsHtml = `
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+          ${StatCard({
+            title: t('strategy.totalReturn'),
+            value: formatPercentage(strategy.returnTotal),
+            color: strategy.returnTotal >= 0 ? 'text-accent' : 'text-error'
+          })}
+          ${StatCard({
+            title: t('strategy.annualizedReturn'),
+            value: formatPercentage(strategy.returnAnnualized)
+          })}
+          ${StatCard({
+            title: t('strategy.volatility'),
+            value: formatPercentage(strategy.volatility)
+          })}
+          ${StatCard({
+            title: t('strategy.sharpeRatio'),
+            value: strategy.sharpeRatio.toFixed(2)
+          })}
+        </div>
+      `;
+
+      // Drawdown chart
+      const drawdownChartHtml = `
+        <div class="bg-white rounded-lg p-6 shadow-sm border border-gray-200 mb-8">
+          <h2 class="text-lg font-semibold text-gray-900 mb-4">${t('strategy.drawdownChart')}</h2>
+          <canvas id="drawdown-chart" width="800" height="300" aria-label="Strategy drawdown chart"></canvas>
+        </div>
+      `;
+
+      // Allocation history table
+      const allocationTableHtml = `
+        <div class="bg-white rounded-lg p-6 shadow-sm border border-gray-200 mb-8">
+          <h2 class="text-lg font-semibold text-gray-900 mb-4">${t('strategy.allocationHistory')}</h2>
+          ${DataTable({
+            columns: [
+              { key: 'dateFormatted', label: t('strategy.date'), width: '25%' },
+              { key: 'action', label: t('strategy.action'), width: '25%' },
+              { key: 'amountFormatted', label: t('strategy.amount'), width: '25%' },
+              { key: 'balanceFormatted', label: t('strategy.balance'), width: '25%' }
+            ],
+            rows: strategy.allocationHistory.map(h => ({
+              dateFormatted: new Date(h.date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }),
+              action: h.action === 'allocated' ? t('strategy.allocated') : t('strategy.withdrawn'),
+              amountFormatted: formatCurrency(h.amount),
+              balanceFormatted: formatCurrency(h.balance)
+            }))
+          })}
+        </div>
+      `;
+
+      // Additional info
+      const additionalInfoHtml = `
+        <div class="bg-white rounded-lg p-6 shadow-sm border border-gray-200 mb-8">
+          <h2 class="text-lg font-semibold text-gray-900 mb-4">Strategy Details</h2>
+          <dl class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <dt class="text-sm font-medium text-gray-600">Risk Level</dt>
+              <dd class="text-sm text-gray-900 mt-1">${strategy.riskLevel}</dd>
+            </div>
+            <div>
+              <dt class="text-sm font-medium text-gray-600">Minimum Investment</dt>
+              <dd class="text-sm text-gray-900 mt-1">${formatCurrency(strategy.minInvestment)}</dd>
+            </div>
+            <div>
+              <dt class="text-sm font-medium text-gray-600">Current Allocation</dt>
+              <dd class="text-sm text-gray-900 mt-1">${formatCurrency(strategy.allocatedAmount)}</dd>
+            </div>
+            <div>
+              <dt class="text-sm font-medium text-gray-600">${t('strategy.maxDrawdown')}</dt>
+              <dd class="text-sm text-gray-900 mt-1">${formatPercentage(strategy.maxDrawdown)}</dd>
+            </div>
+          </dl>
+        </div>
+      `;
+
+      // CTAs
+      const ctasHtml = `
+        <div class="flex gap-4">
+          <a href="#/allocate/select" class="px-6 py-3 bg-accent text-white font-semibold rounded-lg hover:bg-accent/90 focus:outline-none focus:ring-2 focus:ring-accent transition-colors">
+            Allocate More Funds
+          </a>
+          <button onclick="alert('Withdraw functionality coming soon')" class="px-6 py-3 bg-white text-primary font-semibold rounded-lg border-2 border-primary hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-accent transition-colors">
+            Withdraw Funds
+          </button>
+        </div>
+      `;
+
+      content.innerHTML = `
+        ${backButton}
+        ${header}
+        ${metricsHtml}
+        ${drawdownChartHtml}
+        ${allocationTableHtml}
+        ${additionalInfoHtml}
+        ${ctasHtml}
+      `;
+
+      // Render drawdown chart
+      renderDrawdownChart();
+    }
+
+    function renderDrawdownChart() {
+      const canvas = document.getElementById('drawdown-chart');
+      if (!canvas) return;
+      if (!strategy || !strategy.performanceHistory || !Array.isArray(strategy.performanceHistory)) return;
+
+      const drawdownData = strategy.performanceHistory.map((p, i) => {
+        const peak = Math.max(...strategy.performanceHistory.slice(0, i + 1).map((x) => x.value));
+        return ((p.value - peak) / peak) * 100;
+      });
+
+      const labels = strategy.performanceHistory.map((p) => new Date(p.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }));
+      renderSimpleLineChart(canvas, labels, drawdownData, {
+        lineColor: '#D44C4C',
+        fillColor: 'rgba(212, 76, 76, 0.12)',
+        baseline: 'zero',
+        yFormatter: (value) => `${value.toFixed(1)}%`,
+        yPadding: 0.05
+      });
+    }
+
+    // Listen for language changes
+    window.addEventListener('languagechange', () => {
+      location.reload();
+    });
+  </script>
+</body>
+</html>

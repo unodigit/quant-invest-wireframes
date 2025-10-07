@@ -1,0 +1,368 @@
+/* iPhone Frame Component
+ * Based on iPhone 14/15 Pro dimensions: 393×852 pt
+ * Frame uses 430×960 px (LogiWarp reference scale)
+ * 4-frame layout: 0.5× scale = 215×480 px
+ */
+
+.iphone-frame-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 0;
+  box-sizing: border-box;
+  flex: 0 0 auto;
+  min-width: 215px;
+}
+
+/* Main device frame - 4 frames layout */
+.iphone-frame {
+  position: relative;
+  width: 215px;
+  height: 480px;
+  background: #1A1C22;
+  border-radius: 27.5px;
+  padding: 6px;
+  box-shadow:
+    0 30px 60px -15px rgba(0, 0, 0, 0.3),
+    0 15px 30px -10px rgba(0, 0, 0, 0.2),
+    inset 0 2px 6px rgba(255, 255, 255, 0.1);
+  border: 1px solid #333C4D;
+  transition: none;
+  will-change: auto;
+}
+
+/* Screen viewport */
+.iphone-screen {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 24px;
+  overflow: hidden;
+  background: #ffffff;
+}
+
+/* Dynamic Island notch */
+.iphone-notch {
+  position: absolute;
+  top: 6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 64px;
+  height: 20px;
+  background: #000000;
+  border-radius: 0 0 10px 10px;
+  z-index: 1000;
+}
+
+/* Home indicator bar */
+.iphone-home-indicator {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 65px;
+  height: 2.5px;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 1.25px;
+  z-index: 1000;
+}
+
+/* Status bar - overlays the screen bezel area, not the content */
+.iphone-status-bar {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  right: 6px;
+  height: 44px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 18px;
+  padding-top: 6px;
+  z-index: 1001;
+  pointer-events: none;
+  font-size: 13px;
+  font-weight: 600;
+  color: #000000;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', sans-serif;
+  background: transparent;
+}
+
+.iphone-status-bar .time {
+  flex-shrink: 0;
+  letter-spacing: -0.3px;
+}
+
+.iphone-status-bar .indicators {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+/* Status bar icons */
+.status-signal {
+  width: 18px;
+  height: 12px;
+  display: flex;
+  gap: 1px;
+  align-items: flex-end;
+}
+
+.status-signal span {
+  width: 3px;
+  background: #000000;
+  border-radius: 1px;
+}
+
+.status-signal span:nth-child(1) { height: 4px; }
+.status-signal span:nth-child(2) { height: 7px; }
+.status-signal span:nth-child(3) { height: 10px; }
+.status-signal span:nth-child(4) { height: 12px; }
+
+.status-wifi {
+  width: 16px;
+  height: 12px;
+}
+
+.status-battery {
+  width: 26px;
+  height: 12px;
+  border: 1.5px solid #000000;
+  border-radius: 3px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: 1.5px;
+}
+
+.status-battery::after {
+  content: '';
+  position: absolute;
+  right: -3px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 2px;
+  height: 5px;
+  background: #000000;
+  border-radius: 0 1px 1px 0;
+}
+
+.status-battery-fill {
+  width: 100%;
+  height: 100%;
+  background: #000000;
+  border-radius: 1.5px;
+}
+
+/* Screen content area with status bar spacer */
+.iphone-screen::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 44px;
+  background: #ffffff;
+  z-index: 1000;
+}
+
+/* Screen content iframe */
+.iphone-screen iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  display: block;
+  background: #ffffff;
+}
+
+/* Loading state */
+.iphone-screen.loading {
+  background: linear-gradient(
+    90deg,
+    #f0f0f0 25%,
+    #e0e0e0 50%,
+    #f0f0f0 75%
+  );
+  background-size: 200% 100%;
+  animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Frame label (optional) */
+.frame-label {
+  position: absolute;
+  top: -30px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.7);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Navigation controls */
+.frame-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+.frame-controls button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background: rgba(51, 65, 85, 0.8);
+  border: 1px solid rgba(71, 85, 105, 0.5);
+  border-radius: 8px;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.frame-controls button:hover {
+  background: rgba(71, 85, 105, 0.9);
+  border-color: rgba(100, 116, 139, 0.7);
+  transform: translateY(-1px);
+}
+
+.frame-controls button:active {
+  transform: translateY(0);
+}
+
+.frame-controls button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.frame-controls button:disabled:hover {
+  background: rgba(51, 65, 85, 0.8);
+  transform: none;
+}
+
+.frame-controls .counter {
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.6);
+  min-width: 50px;
+  text-align: center;
+}
+
+.frame-controls .counter .current {
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 600;
+}
+
+/* Screen name display */
+.screen-name {
+  margin-top: 0.5rem;
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.8);
+  text-align: center;
+  min-height: 20px;
+}
+
+/* Responsive adjustments */
+@media (min-width: 1024px) and (max-width: 1919px) {
+  /* 2-frame layout: 0.75× scale = 322.5×720 px */
+  .iphone-frame-container {
+    min-width: 322.5px;
+  }
+  .iphone-frame {
+    width: 322.5px;
+    height: 720px;
+    border-radius: 41.25px;
+    padding: 9px;
+  }
+
+  .iphone-screen {
+    border-radius: 36px;
+  }
+
+  .iphone-notch {
+    top: 9px;
+    width: 96px;
+    height: 30px;
+    border-radius: 0 0 15px 15px;
+  }
+
+  .iphone-home-indicator {
+    bottom: 15px;
+    width: 97.5px;
+    height: 3.75px;
+  }
+
+  .iphone-status-bar {
+    top: 9px;
+    left: 9px;
+    right: 9px;
+    height: 55px;
+    padding: 0 24px;
+    padding-top: 8px;
+    font-size: 16px;
+  }
+
+  .iphone-screen::before {
+    height: 55px;
+  }
+
+  .status-signal {
+    width: 22px;
+    height: 15px;
+  }
+
+  .status-signal span {
+    width: 4px;
+  }
+
+  .status-signal span:nth-child(1) { height: 5px; }
+  .status-signal span:nth-child(2) { height: 9px; }
+  .status-signal span:nth-child(3) { height: 13px; }
+  .status-signal span:nth-child(4) { height: 15px; }
+
+  .status-wifi {
+    width: 20px;
+    height: 15px;
+  }
+
+  .status-battery {
+    width: 32px;
+    height: 15px;
+  }
+}
+
+@media (max-width: 1023px) {
+  /* Mobile: redirect to single-frame layout */
+  .showcase-layout {
+    display: none;
+  }
+}
+
+/* Accessibility: Focus styles */
+.frame-controls button:focus-visible {
+  outline: 2px solid #00C49A;
+  outline-offset: 2px;
+}
+
+/* Print styles */
+@media print {
+  .iphone-frame {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    page-break-inside: avoid;
+  }
+
+  .frame-controls {
+    display: none;
+  }
+}

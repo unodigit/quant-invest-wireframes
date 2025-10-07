@@ -1,0 +1,361 @@
+/* Responsive Design - T041
+ * Mobile-first approach with breakpoints at 768px and 1024px
+ */
+
+/* Base styles (mobile-first, <768px) */
+
+/* Grid layouts collapse to single column on mobile */
+.grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.grid-cols-1 {
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+}
+
+/* Tables scroll horizontally on mobile */
+.table-container {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+table {
+  min-width: 600px; /* Prevent table from being too narrow */
+}
+
+/* Sticky first column in tables */
+table th:first-child,
+table td:first-child {
+  position: sticky;
+  left: 0;
+  background: white;
+  z-index: 1;
+}
+
+/* Adjust padding for mobile */
+.p-responsive {
+  padding: 1rem;
+}
+
+/* Chart containers */
+canvas {
+  max-width: 100%;
+  height: auto !important;
+}
+
+.chart-wrapper {
+  position: relative;
+  height: 200px;
+  width: 100%;
+}
+
+/* Mobile: Stack buttons vertically */
+.button-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.button-group button,
+.button-group a {
+  width: 100%;
+}
+
+/* Tablet (768px - 1023px) */
+@media (min-width: 768px) {
+  /* 2-column grid for strategy cards */
+  .grid-cols-1.md\:grid-cols-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .grid-cols-1.md\:grid-cols-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  /* Adjust padding */
+  .p-responsive {
+    padding: 1.5rem;
+  }
+
+  /* Chart height */
+  .chart-wrapper {
+    height: 250px;
+  }
+
+  /* Horizontal button layout */
+  .button-group {
+    flex-direction: row;
+  }
+
+  .button-group button,
+  .button-group a {
+    width: auto;
+    flex: 1;
+  }
+}
+
+/* Desktop (1024px+) */
+@media (min-width: 1024px) {
+  /* 3-column grid for strategy cards */
+  .grid-cols-1.lg\:grid-cols-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .grid-cols-1.lg\:grid-cols-4 {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  /* Adjust padding */
+  .p-responsive {
+    padding: 2rem;
+  }
+
+  /* Chart height */
+  .chart-wrapper {
+    height: 300px;
+  }
+
+  /* Tables no longer need horizontal scroll */
+  .table-container {
+    overflow-x: visible;
+  }
+
+  table {
+    min-width: auto;
+  }
+
+  /* Unstick first column on desktop */
+  table th:first-child,
+  table td:first-child {
+    position: static;
+  }
+}
+
+/* Large desktop (1920px+) */
+@media (min-width: 1920px) {
+  .grid-cols-1.xl\:grid-cols-4 {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .p-responsive {
+    padding: 2.5rem;
+  }
+
+  .chart-wrapper {
+    height: 350px;
+  }
+}
+
+/* Specific component responsive adjustments */
+
+/* StatCard */
+.stat-card {
+  min-width: 0; /* Allow cards to shrink below content width */
+}
+
+@media (max-width: 767px) {
+  .stat-card {
+    padding: 1rem;
+  }
+
+  .stat-card .value {
+    font-size: 1.5rem; /* Smaller on mobile */
+  }
+}
+
+/* Modal */
+.modal-container {
+  padding: 1rem;
+}
+
+.modal-content {
+  max-width: 28rem;
+  width: 100%;
+  margin: 0 auto;
+}
+
+@media (max-width: 767px) {
+  .modal-content {
+    max-width: 100%;
+    margin: 1rem;
+  }
+}
+
+/* Stepper */
+.stepper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+}
+
+@media (max-width: 767px) {
+  .stepper {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .stepper .connector {
+    display: none; /* Hide connector lines on mobile */
+  }
+}
+
+/* DataTable */
+@media (max-width: 767px) {
+  /* Card-based layout for mobile */
+  .data-table-mobile {
+    display: block;
+  }
+
+  .data-table-mobile thead {
+    display: none;
+  }
+
+  .data-table-mobile tbody tr {
+    display: block;
+    margin-bottom: 1rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    padding: 1rem;
+  }
+
+  .data-table-mobile tbody td {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem 0;
+    border: none;
+  }
+
+  .data-table-mobile tbody td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    margin-right: 1rem;
+  }
+}
+
+/* Form inputs */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+input[type="date"],
+select,
+textarea {
+  width: 100%;
+  font-size: 16px; /* Prevent iOS zoom on focus */
+}
+
+@media (min-width: 768px) {
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="number"],
+  input[type="date"],
+  select,
+  textarea {
+    font-size: 14px;
+  }
+}
+
+/* Performance Chart period toggles */
+.period-toggles {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 767px) {
+  .period-toggles button {
+    flex: 1 1 calc(33.33% - 0.5rem);
+    min-width: 60px;
+  }
+}
+
+/* Alert Banner */
+.alert-banner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 40;
+  padding: 0.75rem 1rem;
+}
+
+@media (min-width: 1024px) {
+  .alert-banner {
+    left: 16rem; /* Account for sidebar on desktop */
+  }
+}
+
+/* Sidebar offset for main content */
+@media (min-width: 1024px) {
+  .main-content-offset {
+    margin-left: 16rem; /* 64 * 4 = 256px = 16rem */
+  }
+}
+
+/* Container max-widths */
+.container-sm {
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.container-md {
+  max-width: 768px;
+  margin: 0 auto;
+}
+
+.container-lg {
+  max-width: 1024px;
+  margin: 0 auto;
+}
+
+.container-xl {
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+/* Safe areas for iOS devices with notch */
+@supports (padding: max(0px)) {
+  .safe-top {
+    padding-top: max(1rem, env(safe-area-inset-top));
+  }
+
+  .safe-bottom {
+    padding-bottom: max(1rem, env(safe-area-inset-bottom));
+  }
+
+  .safe-left {
+    padding-left: max(1rem, env(safe-area-inset-left));
+  }
+
+  .safe-right {
+    padding-right: max(1rem, env(safe-area-inset-right));
+  }
+}
+
+/* Print styles */
+@media print {
+  .no-print,
+  nav,
+  .sidebar,
+  button,
+  .alert-banner {
+    display: none !important;
+  }
+
+  .main-content-offset {
+    margin-left: 0 !important;
+  }
+
+  @page {
+    margin: 1cm;
+  }
+
+  body {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+}

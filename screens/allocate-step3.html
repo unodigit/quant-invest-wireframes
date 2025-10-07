@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Confirm Allocation - Quant Invest</title>
+
+  <!-- iOS-optimized Font Stack (System fonts + Inter fallback) -->
+  <link rel="preconnect" href="https://rsms.me/">
+  <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+  <link rel="stylesheet" href="../css/main.css">
+
+</head>
+<body class="bg-gray-50 font-sans">
+
+  <main id="allocate-content" class="min-h-screen p-4 md:p-6 flex flex-col">
+    <!-- Content will be rendered here -->
+  </main>
+
+  <script type="module">
+    import { mockData, formatCurrency } from '../js/data.js';
+    import { Stepper } from '../js/ui.js';
+    import { submitAllocation } from '../js/interactions.js';
+    import { t } from '../js/i18n.js';
+
+    // Get selected strategy and amount from session storage
+    const strategyId = sessionStorage.getItem('selectedStrategy');
+    const amount = parseFloat(sessionStorage.getItem('allocationAmount'));
+    const strategy = mockData.strategies.find(s => s.id === strategyId);
+
+    if (!strategy || !amount) {
+      window.location.hash = '#/allocate/select';
+    }
+
+    function renderAllocateStep3() {
+      const content = document.getElementById('allocate-content');
+
+      // Back button
+      const backButton = `
+        <a href="#/allocate/amount" class="inline-flex items-center text-accent hover:underline mb-6">
+          <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+          </svg>
+          ${t('common.back')}
+        </a>
+      `;
+
+      // Stepper
+      const stepperHtml = Stepper({
+        steps: [
+          { label: t('allocate.selectStrategy') },
+          { label: t('allocate.enterAmount') },
+          { label: t('allocate.confirm') }
+        ],
+        currentStep: 3
+      });
+
+      // Title
+      const titleHtml = `
+        <h1 class="text-2xl font-bold text-primary mb-6">${t('allocate.confirmTitle')}</h1>
+      `;
+
+      // Confirmation details
+      const confirmationHtml = `
+        <div class="max-w-2xl bg-white rounded-lg p-8 shadow-sm border border-gray-200">
+          <h2 class="text-lg font-semibold text-gray-900 mb-6">Review your allocation</h2>
+
+          <dl class="space-y-4">
+            <div class="flex justify-between py-3 border-b border-gray-200">
+              <dt class="text-sm font-medium text-gray-600">${t('allocate.strategy')}</dt>
+              <dd class="text-sm font-semibold text-gray-900">${strategy && strategy.name ? strategy.name : 'Strategy'}</dd>
+            </div>
+            <div class="flex justify-between py-3 border-b border-gray-200">
+              <dt class="text-sm font-medium text-gray-600">${t('allocate.amount')}</dt>
+              <dd class="text-xl font-bold text-primary">${formatCurrency(amount)}</dd>
+            </div>
+            <div class="flex justify-between py-3 border-b border-gray-200">
+              <dt class="text-sm font-medium text-gray-600">Risk Level</dt>
+              <dd class="text-sm font-semibold text-gray-900">${strategy && strategy.riskLevel ? strategy.riskLevel : 'Medium'}</dd>
+            </div>
+            <div class="flex justify-between py-3 border-b border-gray-200">
+              <dt class="text-sm font-medium text-gray-600">Expected Annual Return</dt>
+              <dd class="text-sm font-semibold text-accent">${strategy && strategy.returnAnnualized ? (strategy.returnAnnualized * 100).toFixed(2) : '8.50'}%</dd>
+            </div>
+          </dl>
+
+          <div class="mt-6 bg-yellow-50 border-l-4 border-yellow-400 p-4">
+            <div class="flex">
+              <svg class="h-5 w-5 text-yellow-600 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+              </svg>
+              <div>
+                <p class="text-sm font-medium text-yellow-800">Important Notice</p>
+                <p class="text-sm text-yellow-700 mt-1">
+                  ${t('allocate.confirmWarning')} Past performance does not guarantee future results. Cryptocurrency investments carry risk of loss.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+      
+      // Action buttons at the bottom
+      const actionButtonsHtml = `
+        <div class="mt-auto pt-6 max-w-2xl w-full">
+          <div class="flex gap-3">
+            <a href="#/allocate/amount" class="flex-1 px-6 py-3 bg-white text-primary font-semibold rounded-lg border-2 border-primary hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-accent transition-colors text-center">
+              ${t('common.back')}
+            </a>
+            <button
+              onclick="window.submitAllocation()"
+              class="flex-1 px-6 py-3 bg-accent text-white font-semibold rounded-lg hover:bg-accent/90 focus:outline-none focus:ring-2 focus:ring-accent transition-colors"
+            >
+              ${t('allocate.confirmAllocation')}
+            </button>
+          </div>
+        </div>
+      `;
+
+      content.innerHTML = `
+        <div class="flex-1">
+          ${backButton}
+          ${stepperHtml}
+          ${titleHtml}
+          ${confirmationHtml}
+        </div>
+        ${actionButtonsHtml}
+      `;
+    }
+
+    // Make submitAllocation globally available
+    window.submitAllocation = submitAllocation;
+
+    // Listen for language changes
+    window.addEventListener('languagechange', () => {
+      location.reload();
+    });
+
+    // Render on load
+    renderAllocateStep3();
+  </script>
+</body>
+</html>

@@ -1,0 +1,977 @@
+/* ============================================
+   iOS Native Design System
+   Based on Apple Human Interface Guidelines 2024
+   ============================================ */
+
+:root {
+  /* iOS System Colors */
+  --ios-background: #f2f2f7;
+  --ios-background-secondary: #ffffff;
+  --ios-background-tertiary: #ffffff;
+  
+  --ios-card: #ffffff;
+  --ios-card-grouped: #f2f2f7;
+  
+  /* Text Colors (iOS System) */
+  --ios-label: #000000;
+  --ios-label-secondary: rgba(60, 60, 67, 0.6);
+  --ios-label-tertiary: rgba(60, 60, 67, 0.3);
+  --ios-label-quaternary: rgba(60, 60, 67, 0.18);
+  
+  /* Legacy naming for compatibility */
+  --ios-text-primary: #1c1c1e;
+  --ios-text-secondary: #3a3a3c;
+  --ios-text-tertiary: #8e8e93;
+  
+  /* iOS System Colors */
+  --ios-blue: #007AFF;
+  --ios-green: #34C759;
+  --ios-indigo: #5856D6;
+  --ios-orange: #FF9500;
+  --ios-pink: #FF2D55;
+  --ios-purple: #AF52DE;
+  --ios-red: #FF3B30;
+  --ios-teal: #5AC8FA;
+  --ios-yellow: #FFCC00;
+  
+  /* Semantic Colors */
+  --ios-accent: #34C759;
+  --ios-primary: #007AFF;
+  --ios-destructive: #FF3B30;
+  
+  /* Fill Colors */
+  --ios-fill: rgba(120, 120, 128, 0.2);
+  --ios-fill-secondary: rgba(120, 120, 128, 0.16);
+  --ios-fill-tertiary: rgba(118, 118, 128, 0.12);
+  --ios-fill-quaternary: rgba(116, 116, 128, 0.08);
+  
+  /* Borders & Separators */
+  --ios-separator: rgba(60, 60, 67, 0.29);
+  --ios-separator-opaque: #C6C6C8;
+  --ios-border: rgba(0, 0, 0, 0.04);
+  --ios-border-strong: rgba(0, 0, 0, 0.08);
+  
+  /* Shadows */
+  --ios-shadow-small: 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  --ios-shadow-medium: 0 3px 8px 0 rgba(0, 0, 0, 0.12);
+  --ios-shadow-large: 0 8px 16px 0 rgba(0, 0, 0, 0.15);
+  --ios-shadow-xlarge: 0 12px 24px 0 rgba(0, 0, 0, 0.18);
+  
+  /* Border Radius */
+  --ios-radius-small: 8px;
+  --ios-radius-medium: 10px;
+  --ios-radius-large: 12px;
+  --ios-radius-xlarge: 16px;
+  --ios-radius-card: 12px;
+  
+  /* Spacing (8-point grid system) */
+  --ios-spacing-xs: 4px;
+  --ios-spacing-sm: 8px;
+  --ios-spacing-md: 16px;
+  --ios-spacing-lg: 20px;
+  --ios-spacing-xl: 24px;
+  --ios-spacing-2xl: 32px;
+  
+  /* Touch Target Minimum (iOS HIG) */
+  --ios-touch-target: 44px;
+  
+  /* Typography Scale (SF Pro) */
+  --ios-font-size-caption2: 11px;
+  --ios-font-size-caption1: 12px;
+  --ios-font-size-footnote: 13px;
+  --ios-font-size-subhead: 15px;
+  --ios-font-size-callout: 16px;
+  --ios-font-size-body: 17px;
+  --ios-font-size-headline: 17px;
+  --ios-font-size-title3: 20px;
+  --ios-font-size-title2: 22px;
+  --ios-font-size-title1: 28px;
+  --ios-font-size-largetitle: 34px;
+  
+  /* Line Heights */
+  --ios-line-height-tight: 1.2;
+  --ios-line-height-normal: 1.42;
+  --ios-line-height-relaxed: 1.5;
+  
+  /* Transitions */
+  --ios-transition-fast: 0.2s;
+  --ios-transition-normal: 0.3s;
+  --ios-transition-slow: 0.4s;
+  --ios-easing-default: cubic-bezier(0.25, 0.1, 0.25, 1);
+  --ios-easing-in: cubic-bezier(0.42, 0, 1, 1);
+  --ios-easing-out: cubic-bezier(0, 0, 0.58, 1);
+  --ios-easing-spring: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* ============================================
+   Base Typography & Document
+   ============================================ */
+
+body {
+  /* Optimal iOS font stack:
+     1. system-ui: Uses native system font (SF Pro on iOS/macOS)
+     2. -apple-system: Fallback for older Safari versions
+     3. Inter: Premium open-source alternative to SF Pro
+     4. System defaults: Platform-specific fallbacks
+  */
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Inter', 'SF Pro Text', 'SF Pro Display', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-size: var(--ios-font-size-body);
+  line-height: var(--ios-line-height-normal);
+  background-color: var(--ios-background);
+  color: var(--ios-label);
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  letter-spacing: -0.41px; /* iOS tracking */
+  font-feature-settings: 'cv02' 1, 'cv03' 1, 'cv04' 1, 'cv11' 1; /* Inter OpenType features for better iOS match */
+}
+
+main {
+  color: inherit;
+  min-height: 100vh;
+}
+
+/* iOS Typography Scale */
+h1, .text-largetitle {
+  font-size: var(--ios-font-size-largetitle);
+  font-weight: 700;
+  line-height: var(--ios-line-height-tight);
+  letter-spacing: 0.35px;
+  color: var(--ios-label);
+}
+
+h2, .text-title1 {
+  font-size: var(--ios-font-size-title1);
+  font-weight: 700;
+  line-height: var(--ios-line-height-tight);
+  letter-spacing: 0.36px;
+  color: var(--ios-label);
+}
+
+h3, .text-title2 {
+  font-size: var(--ios-font-size-title2);
+  font-weight: 600;
+  line-height: var(--ios-line-height-normal);
+  letter-spacing: 0.35px;
+  color: var(--ios-label);
+}
+
+h4, .text-title3 {
+  font-size: var(--ios-font-size-title3);
+  font-weight: 600;
+  line-height: var(--ios-line-height-normal);
+  letter-spacing: 0.38px;
+  color: var(--ios-label);
+}
+
+.text-headline {
+  font-size: var(--ios-font-size-headline);
+  font-weight: 600;
+  letter-spacing: -0.43px;
+}
+
+.text-body {
+  font-size: var(--ios-font-size-body);
+  font-weight: 400;
+  letter-spacing: -0.43px;
+}
+
+.text-callout {
+  font-size: var(--ios-font-size-callout);
+  font-weight: 400;
+  letter-spacing: -0.32px;
+}
+
+.text-subhead {
+  font-size: var(--ios-font-size-subhead);
+  font-weight: 400;
+  letter-spacing: -0.24px;
+}
+
+.text-footnote {
+  font-size: var(--ios-font-size-footnote);
+  font-weight: 400;
+  letter-spacing: -0.08px;
+}
+
+.text-caption1 {
+  font-size: var(--ios-font-size-caption1);
+  font-weight: 400;
+  letter-spacing: 0;
+}
+
+.text-caption2 {
+  font-size: var(--ios-font-size-caption2);
+  font-weight: 400;
+  letter-spacing: 0.06px;
+}
+
+p, label, span, li {
+  color: var(--ios-label-secondary);
+  font-size: var(--ios-font-size-body);
+  line-height: var(--ios-line-height-normal);
+}
+
+label {
+  font-size: var(--ios-font-size-subhead);
+  font-weight: 400;
+}
+
+a {
+  color: var(--ios-primary);
+  text-decoration: none;
+  transition: opacity var(--ios-transition-fast) var(--ios-easing-default);
+}
+
+a:hover {
+  opacity: 0.7;
+}
+
+a:active {
+  opacity: 0.5;
+}
+
+/* ============================================
+   Backgrounds & Surfaces
+   ============================================ */
+
+.bg-gray-50,
+.bg-gray-100 {
+  background-color: var(--ios-background);
+}
+
+.bg-white {
+  background-color: var(--ios-card);
+  color: var(--ios-label);
+}
+
+/* iOS-style Cards with proper elevation */
+.bg-white.rounded-lg,
+.bg-white.shadow-sm,
+.bg-white.border,
+.bg-white.border-gray-200,
+.bg-white.border-gray-300 {
+  background-color: var(--ios-card);
+  border: 0.5px solid var(--ios-separator);
+  box-shadow: var(--ios-shadow-medium);
+  border-radius: var(--ios-radius-card);
+}
+
+/* Grouped List Style (iOS Settings-like) */
+.bg-white.rounded-lg.p-6,
+.bg-white.rounded-lg.p-8 {
+  background-color: var(--ios-card);
+  padding: var(--ios-spacing-md);
+}
+
+/* Frosted Glass Effect (iOS Style) */
+header.bg-white,
+nav.bg-white {
+  background-color: rgba(255, 255, 255, 0.72);
+  backdrop-filter: saturate(180%) blur(20px);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  border-color: var(--ios-separator);
+}
+
+/* ============================================
+   Borders & Dividers
+   ============================================ */
+
+.border,
+.border-gray-100,
+.border-gray-200,
+.border-gray-300 {
+  border-color: var(--ios-separator);
+  border-width: 0.5px;
+}
+
+.border-t,
+.border-b {
+  border-color: var(--ios-separator);
+}
+
+.border-primary { border-color: var(--ios-primary); }
+.border-accent { border-color: var(--ios-green); }
+.border-error { border-color: var(--ios-red); }
+
+/* iOS List Separators */
+.border-b.border-gray-200 {
+  border-bottom: 0.5px solid var(--ios-separator);
+}
+
+/* ============================================
+   Shadows & Elevation
+   ============================================ */
+
+.shadow-sm { box-shadow: var(--ios-shadow-small); }
+.shadow { box-shadow: var(--ios-shadow-medium); }
+.shadow-md { box-shadow: var(--ios-shadow-medium); }
+.shadow-lg { box-shadow: var(--ios-shadow-large); }
+.shadow-xl { box-shadow: var(--ios-shadow-xlarge); }
+
+/* ============================================
+   Border Radius
+   ============================================ */
+
+.rounded { border-radius: var(--ios-radius-medium); }
+.rounded-lg { border-radius: var(--ios-radius-card); }
+.rounded-md { border-radius: var(--ios-radius-medium); }
+.rounded-xl { border-radius: var(--ios-radius-xlarge); }
+.rounded-full { border-radius: 9999px; }
+
+/* ============================================
+   Buttons (iOS-style)
+   ============================================ */
+
+button,
+.button {
+  min-height: var(--ios-touch-target);
+  padding: 11px var(--ios-spacing-lg);
+  border-radius: var(--ios-radius-medium);
+  font-size: var(--ios-font-size-body);
+  font-weight: 600;
+  letter-spacing: -0.43px;
+  line-height: 1.2;
+  text-align: center;
+  cursor: pointer;
+  user-select: none;
+  transition: opacity var(--ios-transition-fast) var(--ios-easing-default),
+              transform var(--ios-transition-fast) var(--ios-easing-default);
+  border: none;
+  outline: none;
+}
+
+button:active,
+.button:active {
+  transform: scale(0.96);
+  opacity: 0.85;
+}
+
+button:disabled,
+.button:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+/* Primary Button (iOS Blue) */
+.bg-primary,
+button.bg-primary,
+.bg-blue-600 {
+  background-color: var(--ios-primary);
+  color: #ffffff;
+}
+
+.bg-primary:hover,
+button.bg-primary:hover {
+  opacity: 0.85;
+}
+
+.hover\:bg-primary\/90:hover,
+.hover\:bg-blue-700:hover {
+  opacity: 0.85;
+}
+
+/* Accent Button (iOS Green) */
+.bg-accent,
+button.bg-accent {
+  background-color: var(--ios-green);
+  color: #ffffff;
+}
+
+.bg-accent:hover,
+button.bg-accent:hover {
+  opacity: 0.85;
+}
+
+.hover\:bg-accent\/90:hover {
+  opacity: 0.85;
+}
+
+/* Secondary Button (Bordered) */
+button.bg-white,
+.button.bg-white {
+  background-color: var(--ios-card);
+  color: var(--ios-primary);
+  border: 0.5px solid var(--ios-separator);
+}
+
+button.bg-white:active {
+  background-color: var(--ios-fill);
+}
+
+/* Destructive Button */
+.bg-red-600,
+button.bg-red-600 {
+  background-color: var(--ios-red);
+  color: #ffffff;
+}
+
+/* Text Button */
+.text-primary { color: var(--ios-primary); }
+.text-accent { color: var(--ios-green); }
+.text-error { color: var(--ios-red); }
+
+/* ============================================
+   Form Controls (iOS-style)
+   ============================================ */
+
+input,
+textarea,
+select {
+  min-height: var(--ios-touch-target);
+  padding: 11px var(--ios-spacing-md);
+  border: 0.5px solid var(--ios-separator);
+  border-radius: var(--ios-radius-medium);
+  background-color: var(--ios-fill-tertiary);
+  color: var(--ios-label);
+  font-size: var(--ios-font-size-body);
+  font-family: inherit;
+  letter-spacing: -0.43px;
+  transition: border-color var(--ios-transition-fast) var(--ios-easing-default),
+              background-color var(--ios-transition-fast) var(--ios-easing-default);
+  outline: none;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--ios-label-tertiary);
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: var(--ios-primary);
+  background-color: var(--ios-card);
+}
+
+.focus\:ring-accent:focus,
+.focus\:ring-2:focus {
+  box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.15);
+}
+
+/* iOS-style Search Bar */
+input[type="search"] {
+  background-color: var(--ios-fill);
+  border-radius: 10px;
+  padding-left: 36px;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="%23888888" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>');
+  background-repeat: no-repeat;
+  background-position: 12px center;
+  background-size: 16px;
+}
+
+/* ============================================
+   Tables & Lists (iOS-style)
+   ============================================ */
+
+table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: var(--ios-card);
+  border-radius: var(--ios-radius-card);
+  overflow: hidden;
+  border: 0.5px solid var(--ios-separator);
+  box-shadow: var(--ios-shadow-small);
+}
+
+thead {
+  background: var(--ios-fill-quaternary);
+  color: var(--ios-label-secondary);
+  font-size: var(--ios-font-size-footnote);
+  font-weight: 600;
+  letter-spacing: -0.08px;
+}
+
+thead th {
+  padding: 12px var(--ios-spacing-md);
+  text-align: left;
+  font-weight: 600;
+}
+
+tbody td {
+  padding: 12px var(--ios-spacing-md);
+  font-size: var(--ios-font-size-body);
+  color: var(--ios-label);
+}
+
+tbody tr {
+  border-top: 0.5px solid var(--ios-separator);
+}
+
+tbody tr:first-child {
+  border-top: none;
+}
+
+tr:active {
+  background: var(--ios-fill-quaternary);
+}
+
+/* iOS List Items */
+.list-item {
+  display: flex;
+  align-items: center;
+  min-height: var(--ios-touch-target);
+  padding: 12px var(--ios-spacing-md);
+  background: var(--ios-card);
+  border-bottom: 0.5px solid var(--ios-separator);
+}
+
+.list-item:last-child {
+  border-bottom: none;
+}
+
+.list-item:active {
+  background: var(--ios-fill-quaternary);
+}
+
+/* ============================================
+   Cards & Grouped Content
+   ============================================ */
+
+.card-ios,
+section,
+div.card,
+.bg-white.rounded-lg,
+.bg-white.shadow-sm {
+  background: var(--ios-card);
+  border-radius: var(--ios-radius-card);
+  border: 0.5px solid var(--ios-separator);
+  box-shadow: var(--ios-shadow-small);
+}
+
+/* iOS Grouped List Style */
+.grouped-list {
+  background: var(--ios-background);
+  padding: var(--ios-spacing-md) 0;
+}
+
+.grouped-list-item {
+  background: var(--ios-card);
+  border-top: 0.5px solid var(--ios-separator);
+  border-bottom: 0.5px solid var(--ios-separator);
+  padding: 12px var(--ios-spacing-md);
+  margin-bottom: -0.5px;
+}
+
+.grouped-list-item:first-child {
+  border-top-left-radius: var(--ios-radius-medium);
+  border-top-right-radius: var(--ios-radius-medium);
+}
+
+.grouped-list-item:last-child {
+  border-bottom-left-radius: var(--ios-radius-medium);
+  border-bottom-right-radius: var(--ios-radius-medium);
+}
+
+/* ============================================
+   Badges & Status Pills
+   ============================================ */
+
+.badge-ios,
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: var(--ios-font-size-caption1);
+  font-weight: 600;
+  letter-spacing: 0;
+}
+
+.bg-green-100 {
+  background-color: rgba(52, 199, 89, 0.15);
+  color: var(--ios-green);
+}
+
+.text-green-800 {
+  color: var(--ios-green);
+}
+
+.bg-yellow-100 {
+  background-color: rgba(255, 204, 0, 0.15);
+  color: var(--ios-yellow);
+}
+
+.text-yellow-800 {
+  color: #C17900;
+}
+
+.bg-red-100 {
+  background-color: rgba(255, 59, 48, 0.15);
+  color: var(--ios-red);
+}
+
+.text-red-800 {
+  color: var(--ios-red);
+}
+
+.bg-blue-100 {
+  background-color: rgba(0, 122, 255, 0.15);
+  color: var(--ios-primary);
+}
+
+.text-blue-800 {
+  color: var(--ios-primary);
+}
+
+/* ============================================
+   Alerts & Notifications
+   ============================================ */
+
+.bg-yellow-50 {
+  background-color: rgba(255, 204, 0, 0.1);
+  border-left: 3px solid var(--ios-yellow);
+}
+
+.bg-blue-50 {
+  background-color: rgba(0, 122, 255, 0.1);
+  border-left: 3px solid var(--ios-primary);
+}
+
+.text-yellow-700,
+.text-yellow-800 {
+  color: #C17900;
+}
+
+.text-blue-700 {
+  color: var(--ios-primary);
+}
+
+/* ============================================
+   Utilities & Text Colors
+   ============================================ */
+
+.text-gray-400 { color: var(--ios-label-quaternary); }
+.text-gray-500 { color: var(--ios-label-tertiary); }
+.text-gray-600 { color: var(--ios-label-secondary); }
+.text-gray-700 { color: var(--ios-label-secondary); }
+.text-gray-800 { color: var(--ios-label); }
+.text-gray-900 { color: var(--ios-label); }
+
+/* ============================================
+   Animations & Transitions
+   ============================================ */
+
+.translate-x-full,
+.translate-x-0,
+.transition-transform {
+  transition: transform var(--ios-transition-normal) var(--ios-easing-spring);
+}
+
+.transition-colors {
+  transition: background-color var(--ios-transition-fast) var(--ios-easing-default),
+              color var(--ios-transition-fast) var(--ios-easing-default);
+}
+
+.transition-all {
+  transition: all var(--ios-transition-fast) var(--ios-easing-default);
+}
+
+/* ============================================
+   Modals & Overlays
+   ============================================ */
+
+.bg-black\/50 {
+  background-color: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+/* Drawer */
+#detail-drawer,
+#history-drawer {
+  background: var(--ios-card);
+  box-shadow: var(--ios-shadow-xlarge);
+  border-left: 0.5px solid var(--ios-separator);
+}
+
+/* ============================================
+   Charts & Canvases
+   ============================================ */
+
+canvas {
+  border-radius: var(--ios-radius-medium);
+  background: var(--ios-card);
+  border: 0.5px solid var(--ios-separator);
+  box-shadow: var(--ios-shadow-small);
+}
+
+/* ============================================
+   Form Elements - iOS Native Checkboxes & Radio
+   ============================================ */
+
+.checkbox-group {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.checkbox-group.align-start {
+  align-items: flex-start;
+}
+
+.checkbox-group.align-start .checkbox-label {
+  line-height: 1.45;
+}
+
+.checkbox-label {
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: var(--ios-text-secondary);
+}
+
+/* Hide default checkbox */
+input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  width: 22px;
+  height: 22px;
+  min-width: 22px;
+  min-height: 22px;
+  flex-shrink: 0;
+  border-radius: 6px;
+  border: 1.5px solid var(--ios-separator-opaque);
+  background: var(--ios-card);
+  cursor: pointer;
+  position: relative;
+  transition: all 0.15s var(--ios-easing-default);
+  vertical-align: middle;
+  margin: 0;
+  display: inline-block;
+}
+
+input[type="checkbox"]:hover {
+  border-color: var(--ios-label-tertiary);
+}
+
+input[type="checkbox"]:focus {
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(0, 122, 255, 0.1);
+}
+
+/* Checked state */
+input[type="checkbox"]:checked {
+  background: var(--ios-primary);
+  border-color: var(--ios-primary);
+  animation: checkboxPop 0.2s var(--ios-easing-default);
+}
+
+/* Checkmark */
+input[type="checkbox"]:checked::after {
+  content: '';
+  position: absolute;
+  left: 7px;
+  top: 3px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 2.5px 2.5px 0;
+  transform: rotate(45deg);
+  animation: checkmarkDraw 0.15s var(--ios-easing-default) forwards;
+}
+
+@keyframes checkboxPop {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(0.9);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes checkmarkDraw {
+  0% {
+    height: 0;
+    width: 0;
+  }
+  50% {
+    height: 9px;
+    width: 0;
+  }
+  100% {
+    height: 9px;
+    width: 4px;
+  }
+}
+
+/* Disabled state */
+input[type="checkbox"]:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Radio buttons - iOS style */
+input[type="radio"] {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  width: 22px;
+  height: 22px;
+  min-width: 22px;
+  min-height: 22px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  border: 1.5px solid var(--ios-separator-opaque);
+  background: var(--ios-card);
+  cursor: pointer;
+  position: relative;
+  transition: all 0.15s var(--ios-easing-default);
+  vertical-align: middle;
+  margin: 0;
+  display: inline-block;
+}
+
+input[type="radio"]:hover {
+  border-color: var(--ios-label-tertiary);
+}
+
+input[type="radio"]:focus {
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(0, 122, 255, 0.1);
+}
+
+input[type="radio"]:checked {
+  border-color: var(--ios-primary);
+  border-width: 7px;
+  animation: radioPop 0.15s var(--ios-easing-default);
+}
+
+@keyframes radioPop {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(0.9);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+input[type="radio"]:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Label styling for checkboxes/radios */
+label {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  font-size: var(--ios-font-size-body);
+  color: var(--ios-label);
+  line-height: var(--ios-line-height-normal);
+  margin: 0;
+}
+
+label input[type="checkbox"],
+label input[type="radio"] {
+  margin: 0;
+  margin-right: 0 !important;
+  flex-shrink: 0;
+}
+
+label:has(input[type="checkbox"]:disabled),
+label:has(input[type="radio"]:disabled) {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ============================================
+   iOS Navigation & Header
+   ============================================ */
+
+.bg-gradient-to-b {
+  background: linear-gradient(to bottom, 
+    rgba(15, 23, 42, 0.95), 
+    rgba(30, 41, 59, 0.92));
+  backdrop-filter: saturate(180%) blur(20px);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+}
+
+/* ============================================
+   Screen Metadata (Gallery)
+   ============================================ */
+
+.screen-name {
+  color: var(--ios-label);
+  font-size: var(--ios-font-size-footnote);
+  font-weight: 600;
+  letter-spacing: -0.08px;
+}
+
+.screen-category {
+  color: var(--ios-label-tertiary);
+  font-size: var(--ios-font-size-caption1);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* ============================================
+   Status Bar (iPhone Frame)
+   ============================================ */
+
+.status-signal span,
+.status-battery,
+.status-battery-fill {
+  background-color: var(--ios-label);
+}
+
+.status-battery {
+  border-color: var(--ios-label);
+}
+
+/* ============================================
+   Responsive Design (iOS)
+   ============================================ */
+
+@media (max-width: 767px) {
+  body {
+    background-color: var(--ios-card);
+  }
+
+  .bg-white.rounded-lg,
+  .bg-white.shadow-sm {
+    border-radius: var(--ios-radius-medium);
+  }
+
+  h1, .text-largetitle {
+    font-size: 28px;
+  }
+
+  h2, .text-title1 {
+    font-size: 24px;
+  }
+}
+
+@media (min-width: 768px) {
+  .md\:grid-cols-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .md\:grid-cols-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .md\:grid-cols-4 {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+/* ============================================
+   Dark Mode Support (Future)
+   ============================================ */
+
+@media (prefers-color-scheme: dark) {
+  /* iOS Dark Mode colors would go here */
+  /* Currently not implemented */
+}

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Deposit Funds - Quant Invest</title>
+
+  <!-- iOS-optimized Font Stack (System fonts + Inter fallback) -->
+  <link rel="preconnect" href="https://rsms.me/">
+  <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+  <link rel="stylesheet" href="../css/main.css">
+
+</head>
+<body class="bg-gray-50 font-sans">
+
+  <main id="deposit-content" class="min-h-screen p-4 md:p-6">
+    <!-- Content will be rendered here -->
+  </main>
+
+  <script type="module">
+    import { getCurrentUser } from '../js/data.js';
+    import { confirmDeposit } from '../js/interactions.js';
+    import { t } from '../js/i18n.js';
+
+    const user = getCurrentUser();
+
+    function renderDeposit() {
+      const content = document.getElementById('deposit-content');
+
+      // Back button
+      const backButton = `
+        <a href="#/dashboard" class="inline-flex items-center text-accent hover:underline mb-6">
+          <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+          </svg>
+          ${t('common.back')}
+        </a>
+      `;
+
+      // Title
+      const titleHtml = `
+        <h1 class="text-2xl font-bold text-primary mb-6">${t('banking.depositTitle')}</h1>
+      `;
+
+      // Generate unique reference code
+      const referenceCode = `INV${user.id.slice(-3)}${Date.now().toString().slice(-6)}`;
+
+      // Deposit instructions
+      const depositHtml = `
+        <div class="max-w-2xl bg-white rounded-lg p-8 shadow-sm border border-gray-200">
+          <h2 class="text-lg font-semibold text-primary mb-6">${t('banking.instructions')}</h2>
+
+          <div class="bg-blue-50 border-l-4 border-blue-400 p-4 mb-6">
+            <p class="text-sm text-blue-700">
+              Transfer funds from your bank account to the details below. Funds typically arrive within 1-3 business days.
+            </p>
+          </div>
+
+          <dl class="space-y-4">
+            <div class="flex justify-between items-center py-3 border-b border-gray-200">
+              <dt class="text-sm font-medium text-gray-600">${t('banking.bsb')}</dt>
+              <dd class="text-lg font-mono font-bold text-primary">062-000</dd>
+            </div>
+
+            <div class="flex justify-between items-center py-3 border-b border-gray-200">
+              <dt class="text-sm font-medium text-gray-600">${t('banking.accountNumber')}</dt>
+              <dd class="text-lg font-mono font-bold text-primary">1234 5678</dd>
+            </div>
+
+            <div class="flex justify-between items-center py-3 border-b border-gray-200">
+              <dt class="text-sm font-medium text-gray-600">${t('banking.reference')}</dt>
+              <dd class="flex items-center">
+                <span class="text-lg font-mono font-bold text-accent mr-3" id="reference-code">${referenceCode}</span>
+                <button
+                  onclick="copyToClipboard('${referenceCode}')"
+                  class="text-accent hover:underline text-sm"
+                  aria-label="Copy reference code"
+                >
+                  Copy
+                </button>
+              </dd>
+            </div>
+          </dl>
+
+          <div class="mt-8 bg-yellow-50 border-l-4 border-yellow-400 p-4">
+            <div class="flex">
+              <svg class="h-5 w-5 text-yellow-600 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+              </svg>
+              <div>
+                <p class="text-sm font-medium text-yellow-800">Important</p>
+                <p class="text-sm text-yellow-700 mt-1">
+                  Please include the reference code <strong>${referenceCode}</strong> in your transfer to ensure funds are credited to your account.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-6">
+            <p class="text-sm text-gray-600 mb-4">
+              ${t('banking.processingTime')}
+            </p>
+          </div>
+
+          <div class="mt-8 pt-6 border-t border-gray-200">
+            <button
+              onclick="window.confirmDeposit()"
+              class="w-full px-6 py-3 bg-accent text-white font-semibold rounded-lg hover:bg-accent/90 focus:outline-none focus:ring-2 focus:ring-accent transition-colors"
+            >
+              ${t('banking.transferComplete')}
+            </button>
+            <p class="text-xs text-gray-500 text-center mt-3">
+              Click this button after you have completed the transfer
+            </p>
+          </div>
+        </div>
+      `;
+
+      content.innerHTML = `
+        ${backButton}
+        ${titleHtml}
+        ${depositHtml}
+      `;
+    }
+
+    // Copy to clipboard
+    window.copyToClipboard = function(text) {
+      navigator.clipboard.writeText(text).then(() => {
+        alert('Reference code copied to clipboard!');
+      }).catch(() => {
+        alert('Failed to copy. Please copy manually: ' + text);
+      });
+    };
+
+    // Make confirmDeposit globally available
+    window.confirmDeposit = confirmDeposit;
+
+    // Listen for language changes
+    window.addEventListener('languagechange', () => {
+      location.reload();
+    });
+
+    // Render on load
+    renderDeposit();
+  </script>
+</body>
+</html>

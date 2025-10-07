@@ -1,0 +1,32 @@
+# OS-generated files
+.DS_Store
+Thumbs.db
+
+# Node/npm
+node_modules/
+npm-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# Logs
+*.log
+logs/
+
+# Runtime artifacts
+*.cache
+.cache/
+coverage/
+
+# Local tooling
+.env
+.env.*
+.idea/
+.vscode/
+*.swp
+
+# Build outputs
+/dist/
+/build/
+
+# Mac resource forks
+._*

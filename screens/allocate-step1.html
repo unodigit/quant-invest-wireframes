@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Select Strategy - Quant Invest</title>
+
+  <!-- iOS-optimized Font Stack (System fonts + Inter fallback) -->
+  <link rel="preconnect" href="https://rsms.me/">
+  <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+  <link rel="stylesheet" href="../css/main.css">
+
+</head>
+<body class="bg-gray-50 font-sans">
+
+  <main id="allocate-content" class="min-h-screen p-4 md:p-6">
+    <!-- Content will be rendered here -->
+  </main>
+
+  <script type="module">
+    import { mockData, formatCurrency, formatPercentage, getRiskLevelKey } from '../js/data.js';
+    import { Stepper } from '../js/ui.js';
+    import { selectStrategy } from '../js/interactions.js';
+    import { t } from '../js/i18n.js';
+
+    function renderAllocateStep1() {
+      const content = document.getElementById('allocate-content');
+
+      // Back button
+      const backButton = `
+        <a href="#/dashboard" class="inline-flex items-center text-accent hover:underline mb-6">
+          <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+          </svg>
+          ${t('common.back')}
+        </a>
+      `;
+
+      // Stepper
+      const stepperHtml = Stepper({
+        steps: [
+          { label: t('allocate.selectStrategy') },
+          { label: t('allocate.enterAmount') },
+          { label: t('allocate.confirm') }
+        ],
+        currentStep: 1
+      });
+
+      // Title
+      const titleHtml = `
+        <h1 class="text-2xl font-bold text-primary mb-6">${t('allocate.selectStrategyTitle')}</h1>
+      `;
+
+      // Strategy cards
+      const strategyCardsHtml = mockData.strategies.map(strategy => `
+        <button
+          onclick="window.selectStrategy('${strategy.id}')"
+          class="w-full text-left bg-white rounded-lg p-6 shadow-sm border border-gray-200 hover:border-accent hover:shadow-md transition-all focus:outline-none focus:ring-2 focus:ring-accent"
+          aria-label="Select ${strategy.name}"
+        >
+          <div class="flex items-start justify-between">
+            <div class="flex-1">
+              <h3 class="text-lg font-semibold text-primary">${strategy.name}</h3>
+              <p class="text-sm text-gray-600 mt-1">${strategy.description}</p>
+            </div>
+            <svg class="w-6 h-6 text-gray-400 ml-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+            </svg>
+          </div>
+
+          <div class="space-y-3 mt-6">
+            <div class="flex items-center justify-between">
+              <dt class="text-sm text-gray-600 min-w-[140px]">${t('strategy.totalReturn')}</dt>
+              <dd class="text-sm font-semibold ${strategy.returnTotal >= 0 ? 'text-accent' : 'text-error'}">
+                ${formatPercentage(strategy.returnTotal)}
+              </dd>
+            </div>
+            <div class="flex items-center justify-between">
+              <dt class="text-sm text-gray-600 min-w-[140px]">${t('strategy.annualizedReturn')}</dt>
+              <dd class="text-sm font-semibold text-gray-900">${formatPercentage(strategy.returnAnnualized)}</dd>
+            </div>
+            <div class="flex items-center justify-between">
+              <dt class="text-sm text-gray-600 min-w-[140px]">${t('strategy.riskLevel')}</dt>
+              <dd class="text-sm font-semibold text-gray-900">${t(getRiskLevelKey(strategy.riskLevel))}</dd>
+            </div>
+            <div class="flex items-center justify-between">
+              <dt class="text-sm text-gray-600 min-w-[140px]">${t('strategy.minimumInvestment')}</dt>
+              <dd class="text-sm font-semibold text-gray-900">${formatCurrency(strategy.minimumInvestment)}</dd>
+            </div>
+          </div>
+
+          <div class="mt-4 pt-4 border-t border-gray-200">
+            <a href="#/strategy/${strategy.id}" onclick="event.stopPropagation()" class="text-sm text-accent hover:underline flex items-center">
+              ${t('allocate.viewDetails')} →
+            </a>
+          </div>
+        </button>
+      `).join('');
+
+      content.innerHTML = `
+        ${backButton}
+        ${stepperHtml}
+        ${titleHtml}
+        <div class="grid grid-cols-1 gap-4 max-w-4xl">
+          ${strategyCardsHtml}
+        </div>
+      `;
+    }
+
+    // Make selectStrategy globally available
+    window.selectStrategy = selectStrategy;
+
+    // Listen for language changes
+    window.addEventListener('languagechange', () => {
+      location.reload();
+    });
+
+    // Render on load
+    renderAllocateStep1();
+  </script>
+</body>
+</html>

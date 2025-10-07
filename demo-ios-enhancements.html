@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>iOS Enhancements Demo - Quant Invest</title>
+
+  <!-- iOS-optimized Font Stack -->
+  <link rel="preconnect" href="https://rsms.me/">
+  <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+  
+  <!-- Consolidated CSS -->
+  <link rel="stylesheet" href="css/main.css">
+
+  <style>
+    .demo-section {
+      margin-bottom: 48px;
+    }
+
+    .demo-title {
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: var(--ios-label);
+    }
+
+    .demo-description {
+      font-size: 15px;
+      color: var(--ios-label-secondary);
+      margin-bottom: 24px;
+    }
+
+    .demo-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .demo-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+    }
+
+    .demo-card {
+      background: var(--ios-card);
+      border-radius: var(--ios-radius-card);
+      padding: 20px;
+      box-shadow: var(--ios-elevation-1);
+    }
+
+    .feature-badge {
+      display: inline-block;
+      padding: 6px 12px;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 600;
+      margin-right: 8px;
+      margin-bottom: 8px;
+    }
+
+    .badge-new { background: var(--ios-green); color: white; }
+    .badge-hot { background: var(--ios-red); color: white; }
+    .badge-beta { background: var(--ios-orange); color: white; }
+  </style>
+</head>
+<body class="bg-gray-50">
+
+  <!-- Header -->
+  <header style="background: linear-gradient(135deg, #0D2144 0%, #1a3a5f 100%); color: white; padding: 48px 24px; text-align: center;">
+    <h1 style="font-size: 36px; font-weight: 700; margin-bottom: 12px;">iOS Enhancements Demo</h1>
+    <p style="font-size: 17px; opacity: 0.9; max-width: 600px; margin: 0 auto;">
+      Experience 20+ Apple-Quality features for native iOS look and feel
+    </p>
+    <div style="margin-top: 24px;">
+      <span class="feature-badge badge-new">20+ Features</span>
+      <span class="feature-badge badge-hot">iOS HIG 2024</span>
+      <span class="feature-badge badge-beta">Dark Mode</span>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main style="max-width: 1200px; margin: 0 auto; padding: 48px 24px;">
+
+    <!-- Toast Notifications -->
+    <section class="demo-section">
+      <h2 class="demo-title">🔔 Toast Notifications</h2>
+      <p class="demo-description">Beautiful, native iOS-style toasts with haptic feedback and auto-dismiss.</p>
+      
+      <div class="demo-buttons">
+        <button id="btn-toast-success" class="bg-accent text-white px-6 py-3 rounded-lg font-semibold">
+          Success Toast
+        </button>
+        <button id="btn-toast-error" class="bg-red-600 text-white px-6 py-3 rounded-lg font-semibold">
+          Error Toast
+        </button>
+        <button id="btn-toast-warning" class="bg-yellow-500 text-white px-6 py-3 rounded-lg font-semibold">
+          Warning Toast
+        </button>
+        <button id="btn-toast-info" class="bg-blue-500 text-white px-6 py-3 rounded-lg font-semibold">
+          Info Toast
+        </button>
+      </div>
+    </section>
+
+    <!-- Form Validation -->
+    <section class="demo-section">
+      <h2 class="demo-title">✅ iOS-Style Form Validation</h2>
+      <p class="demo-description">Real-time validation with shake animations, error messages, and haptic feedback.</p>
+      
+      <form id="demo-form" class="demo-card" style="max-width: 500px;">
+        <div style="margin-bottom: 20px;">
+          <label class="block text-sm font-semibold mb-2">Email (required)</label>
+          <input type="email" required placeholder="your@email.com" style="width: 100%; padding: 12px; border: 1px solid var(--ios-separator); border-radius: 10px; font-size: 16px;">
+        </div>
+
+        <div style="margin-bottom: 20px;">
+          <label class="block text-sm font-semibold mb-2">Password (min 8 characters)</label>
+          <input type="password" required minlength="8" placeholder="••••••••" style="width: 100%; padding: 12px; border: 1px solid var(--ios-separator); border-radius: 10px; font-size: 16px;">
+        </div>
+
+        <div style="margin-bottom: 20px;">
+          <label class="block text-sm font-semibold mb-2">Amount (10-10000)</label>
+          <input type="number" required min="10" max="10000" placeholder="100" style="width: 100%; padding: 12px; border: 1px solid var(--ios-separator); border-radius: 10px; font-size: 16px;">
+        </div>
+
+        <button type="submit" class="bg-primary text-white px-6 py-3 rounded-lg font-semibold w-full">
+          Validate Form
+        </button>
+      </form>
+    </section>
+
+    <!-- Modal Sheets -->
+    <section class="demo-section">
+      <h2 class="demo-title">📱 Modal Sheets (Bottom Sheets)</h2>
+      <p class="demo-description">Native iOS bottom sheets with swipe-to-dismiss and backdrop blur.</p>
+      
+      <div class="demo-buttons">
+        <button id="btn-modal-sheet" class="bg-primary text-white px-6 py-3 rounded-lg font-semibold">
+          Show Modal Sheet
+        </button>
+      </div>
+    </section>
+
+    <!-- Action Sheets -->
+    <section class="demo-section">
+      <h2 class="demo-title">⚡ Action Sheets</h2>
+      <p class="demo-description">iOS-native action sheets with destructive actions and cancel button.</p>
+      
+      <div class="demo-buttons">
+        <button id="btn-action-sheet" class="bg-primary text-white px-6 py-3 rounded-lg font-semibold">
+          Show Action Sheet
+        </button>
+      </div>
+    </section>
+
+    <!-- Loading States -->
+    <section class="demo-section">
+      <h2 class="demo-title">⏳ Loading States & Skeletons</h2>
+      <p class="demo-description">iOS-style skeleton loaders with shimmer animation.</p>
+      
+      <div class="demo-buttons">
+        <button id="btn-show-skeleton" class="bg-primary text-white px-6 py-3 rounded-lg font-semibold">
+          Show Skeletons
+        </button>
+        <button id="btn-hide-skeleton" class="bg-accent text-white px-6 py-3 rounded-lg font-semibold">
+          Hide Skeletons
+        </button>
+      </div>
+
+      <div id="skeleton-container" class="demo-grid" style="margin-top: 24px;">
+        <div class="demo-card">
+          <div class="skeleton skeleton-heading"></div>
+          <div class="skeleton skeleton-text"></div>
+          <div class="skeleton skeleton-text"></div>
+          <div class="skeleton skeleton-text" style="width: 60%;"></div>
+        </div>
+        <div class="demo-card">
+          <div class="skeleton skeleton-heading"></div>
+          <div class="skeleton skeleton-text"></div>
+          <div class="skeleton skeleton-text"></div>
+          <div class="skeleton skeleton-text" style="width: 60%;"></div>
+        </div>
+        <div class="demo-card">
+          <div class="skeleton skeleton-heading"></div>
+          <div class="skeleton skeleton-text"></div>
+          <div class="skeleton skeleton-text"></div>
+          <div class="skeleton skeleton-text" style="width: 60%;"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- iOS Spinners -->
+    <section class="demo-section">
+      <h2 class="demo-title">🔄 iOS Spinners</h2>
+      <p class="demo-description">Native iOS-style loading spinners.</p>
+      
+      <div style="display: flex; gap: 24px; align-items: center;">
+        <div style="text-align: center;">
+          <div class="spinner-ios"></div>
+          <p style="margin-top: 8px; font-size: 13px; color: var(--ios-label-secondary);">Small</p>
+        </div>
+        <div style="text-align: center;">
+          <div class="spinner-ios spinner-large"></div>
+          <p style="margin-top: 8px; font-size: 13px; color: var(--ios-label-secondary);">Large</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Empty States -->
+    <section class="demo-section">
+      <h2 class="demo-title">📭 Empty States</h2>
+      <p class="demo-description">Beautiful placeholder screens for empty data.</p>
+      
+      <button id="btn-empty-state" class="bg-primary text-white px-6 py-3 rounded-lg font-semibold mb-4">
+        Show Empty State
+      </button>
+
+      <div id="empty-container" class="demo-card"></div>
+    </section>
+
+    <!-- iOS Search Bar -->
+    <section class="demo-section">
+      <h2 class="demo-title">🔍 iOS-Style Search</h2>
+      <p class="demo-description">Enhanced search bar with cancel button animation and clear functionality.</p>
+      
+      <div class="search-bar-ios">
+        <div class="search-input-wrapper">
+          <svg class="search-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+          </svg>
+          <input type="search" class="search-input" placeholder="Search">
+          <div class="search-clear">×</div>
+        </div>
+        <div class="search-cancel">Cancel</div>
+      </div>
+    </section>
+
+    <!-- Micro-interactions -->
+    <section class="demo-section">
+      <h2 class="demo-title">✨ Micro-interactions</h2>
+      <p class="demo-description">Tap to see scale and opacity animations.</p>
+      
+      <div class="demo-buttons">
+        <button class="bg-primary text-white px-6 py-3 rounded-lg font-semibold">
+          Tap Me (Scale)
+        </button>
+        <button class="bg-accent text-white px-6 py-3 rounded-lg font-semibold ripple">
+          Tap Me (Ripple)
+        </button>
+      </div>
+    </section>
+
+    <!-- Dark Mode -->
+    <section class="demo-section">
+      <h2 class="demo-title">🌙 Dark Mode Support</h2>
+      <p class="demo-description">
+        Automatic dark mode using <code>prefers-color-scheme</code>. 
+        Change your system settings to see it in action!
+      </p>
+      
+      <div class="demo-card">
+        <p style="margin-bottom: 12px;">Current theme: <strong id="current-theme">Loading...</strong></p>
+        <p style="font-size: 14px; color: var(--ios-label-secondary);">
+          On macOS: System Preferences → General → Appearance<br>
+          On iOS: Settings → Display & Brightness → Appearance
+        </p>
+      </div>
+    </section>
+
+    <!-- Safe Areas -->
+    <section class="demo-section">
+      <h2 class="demo-title">📱 Safe Area Support</h2>
+      <p class="demo-description">Content respects iPhone notch and home indicator.</p>
+      
+      <div class="demo-grid">
+        <div class="demo-card safe-top" style="background: var(--ios-fill-secondary);">
+          <strong>safe-top</strong>
+          <p style="margin-top: 8px; font-size: 14px;">Respects top notch</p>
+        </div>
+        <div class="demo-card safe-bottom" style="background: var(--ios-fill-secondary);">
+          <strong>safe-bottom</strong>
+          <p style="margin-top: 8px; font-size: 14px;">Respects home indicator</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Page Transitions -->
+    <section class="demo-section">
+      <h2 class="demo-title">🎬 Page Transitions</h2>
+      <p class="demo-description">Smooth iOS-style page animations.</p>
+      
+      <div class="demo-buttons">
+        <button id="btn-slide-in" class="bg-primary text-white px-6 py-3 rounded-lg font-semibold">
+          Slide In Animation
+        </button>
+        <button id="btn-fade-in" class="bg-accent text-white px-6 py-3 rounded-lg font-semibold">
+          Fade In Animation
+        </button>
+      </div>
+
+      <div id="transition-demo" class="demo-card" style="min-height: 100px; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 600;">
+        Click a button above
+      </div>
+    </section>
+
+    <!-- Documentation Link -->
+    <section class="demo-section" style="text-align: center; padding: 48px 0;">
+      <h2 style="font-size: 28px; font-weight: 700; margin-bottom: 16px;">📚 Complete Documentation</h2>
+      <p style="font-size: 17px; color: var(--ios-label-secondary); margin-bottom: 24px;">
+        Learn how to use all 20+ features with code examples
+      </p>
+      <a href="docs/ios-style-guide.md" class="bg-primary text-white px-8 py-4 rounded-lg font-semibold" style="display: inline-block; text-decoration: none;">
+        View Full Guide →
+      </a>
+    </section>
+
+  </main>
+
+  <script type="module">
+    import { Toast, FormValidator, ModalSheet, showActionSheet, enhanceSearchBar, showEmptyState, showSkeleton } from './js/ios-enhancements.js';
+
+    // Toast Notifications
+    document.getElementById('btn-toast-success').addEventListener('click', () => {
+      Toast.success('Operation completed successfully! ✅');
+    });
+
+    document.getElementById('btn-toast-error').addEventListener('click', () => {
+      Toast.error('Something went wrong. Please try again. ❌');
+    });
+
+    document.getElementById('btn-toast-warning').addEventListener('click', () => {
+      Toast.warning('Please verify your email address. ⚠️');
+    });
+
+    document.getElementById('btn-toast-info').addEventListener('click', () => {
+      Toast.show('New update available! 📱', 'default');
+    });
+
+    // Form Validation
+    const form = document.getElementById('demo-form');
+    const validator = new FormValidator(form);
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      if (validator.validateForm()) {
+        Toast.success('Form is valid! All fields passed validation.');
+      } else {
+        Toast.error('Please fix the errors in the form.');
+      }
+    });
+
+    // Modal Sheet
+    document.getElementById('btn-modal-sheet').addEventListener('click', () => {
+      const content = `
+        <h3 style="font-size: 22px; font-weight: 600; margin-bottom: 16px;">Select an Option</h3>
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <div class="list-item">Option 1</div>
+          <div class="list-item">Option 2</div>
+          <div class="list-item">Option 3</div>
+          <div class="list-item">Option 4</div>
+        </div>
+      `;
+      
+      const sheet = new ModalSheet(content, {
+        dismissible: true,
+        onDismiss: () => Toast.show('Modal dismissed')
+      });
+      
+      sheet.show();
+    });
+
+    // Action Sheet
+    document.getElementById('btn-action-sheet').addEventListener('click', () => {
+      showActionSheet({
+        actions: [
+          {
+            id: 'edit',
+            label: 'Edit',
+            handler: () => Toast.show('Edit clicked')
+          },
+          {
+            id: 'share',
+            label: 'Share',
+            handler: () => Toast.show('Share clicked')
+          },
+          {
+            id: 'copy',
+            label: 'Copy Link',
+            handler: () => Toast.show('Link copied')
+          },
+          {
+            id: 'delete',
+            label: 'Delete',
+            destructive: true,
+            handler: () => Toast.error('Deleted!')
+          }
+        ]
+      });
+    });
+
+    // Skeleton Loading
+    document.getElementById('btn-show-skeleton').addEventListener('click', () => {
+      const container = document.getElementById('skeleton-container');
+      showSkeleton(container, 3);
+    });
+
+    document.getElementById('btn-hide-skeleton').addEventListener('click', () => {
+      const container = document.getElementById('skeleton-container');
+      container.innerHTML = `
+        <div class="demo-card">
+          <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 8px;">Card 1</h3>
+          <p>This is actual content that loaded.</p>
+        </div>
+        <div class="demo-card">
+          <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 8px;">Card 2</h3>
+          <p>This is actual content that loaded.</p>
+        </div>
+        <div class="demo-card">
+          <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 8px;">Card 3</h3>
+          <p>This is actual content that loaded.</p>
+        </div>
+      `;
+    });
+
+    // Empty State
+    document.getElementById('btn-empty-state').addEventListener('click', () => {
+      const container = document.getElementById('empty-container');
+      showEmptyState(container, {
+        icon: '📭',
+        title: 'No Messages',
+        message: 'You don\'t have any messages yet. Start a conversation!',
+        actionLabel: 'New Message',
+        actionHandler: () => Toast.show('Compose message clicked')
+      });
+    });
+
+    // iOS Search Bar
+    const searchBar = document.querySelector('.search-bar-ios');
+    enhanceSearchBar(searchBar);
+
+    // Dark Mode Detection
+    const updateTheme = () => {
+      const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      document.getElementById('current-theme').textContent = isDark ? 'Dark 🌙' : 'Light ☀️';
+    };
+    updateTheme();
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', updateTheme);
+
+    // Page Transitions
+    document.getElementById('btn-slide-in').addEventListener('click', () => {
+      const el = document.getElementById('transition-demo');
+      el.classList.remove('page-enter', 'fade-enter');
+      el.textContent = 'Loading...';
+      
+      setTimeout(() => {
+        el.classList.add('page-enter');
+        el.textContent = 'Slid in from right! →';
+      }, 10);
+    });
+
+    document.getElementById('btn-fade-in').addEventListener('click', () => {
+      const el = document.getElementById('transition-demo');
+      el.classList.remove('page-enter', 'fade-enter');
+      el.textContent = 'Loading...';
+      
+      setTimeout(() => {
+        el.classList.add('fade-enter');
+        el.textContent = 'Faded in smoothly! ✨';
+      }, 10);
+    });
+  </script>
+</body>
+</html>

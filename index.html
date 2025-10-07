@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quant-Driven Crypto Investment Platform</title>
+
+  <!-- Inter Font from Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Consolidated CSS -->
+  <link rel="stylesheet" href="css/main.css">
+
+  <style>
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+  </style>
+</head>
+<body class="bg-gray-50 m-0 p-0">
+
+  <!-- Skip to main content link for keyboard users -->
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <!-- Backdrop for mobile sidebar -->
+  <div id="sidebar-backdrop" class="hidden fixed inset-0 bg-black/50 z-40 lg:hidden" onclick="toggleMobileSidebar()" role="presentation"></div>
+
+  <!-- Main Container -->
+  <div class="flex h-screen overflow-hidden">
+
+    <!-- Sidebar Navigation (Desktop & Mobile) -->
+    <nav id="sidebar" class="hidden lg:block lg:w-64 lg:fixed lg:h-full bg-white border-r border-gray-200 z-30 transition-transform duration-300" role="navigation" aria-label="Main navigation">
+      <div class="p-4 flex flex-col h-full">
+        <!-- Logo/Brand -->
+        <div class="mb-8">
+          <h1 class="text-xl font-bold text-primary">Quant Invest</h1>
+        </div>
+
+        <!-- Navigation Links -->
+        <ul class="space-y-2 flex-1" role="list">
+          <li>
+            <a href="#/dashboard" class="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors nav-link" aria-label="Dashboard">
+              <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+              </svg>
+              <span id="nav-dashboard">Dashboard</span>
+            </a>
+          </li>
+          <li>
+            <a href="#/allocate/select" class="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors nav-link" aria-label="Allocate Funds">
+              <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+              </svg>
+              <span id="nav-allocate">Allocate Funds</span>
+            </a>
+          </li>
+          <li>
+            <a href="#/history" class="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors nav-link" aria-label="Transaction History">
+              <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+              </svg>
+              <span id="nav-history">Transaction History</span>
+            </a>
+          </li>
+          <li>
+            <a href="#/settings" class="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors nav-link" aria-label="Settings">
+              <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+              </svg>
+              <span id="nav-settings">Settings</span>
+            </a>
+          </li>
+        </ul>
+
+        <!-- Language Toggle (Footer) -->
+        <div class="mt-auto pt-4 border-t border-gray-200">
+          <button onclick="toggleLanguage()" class="w-full px-3 py-2 text-sm font-medium text-gray-700 hover:text-primary hover:bg-gray-100 rounded-lg transition-colors" aria-label="Switch language">
+            <span id="lang-toggle">EN</span>
+          </button>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Mobile Header with Hamburger -->
+    <div class="lg:hidden fixed top-0 left-0 right-0 bg-white border-b border-gray-200 z-40">
+      <div class="flex items-center justify-between p-4">
+        <button onclick="toggleMobileSidebar()" class="p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+          </svg>
+        </button>
+        <h1 class="text-lg font-bold text-primary">Quant Invest</h1>
+        <button onclick="toggleLanguage()" class="px-3 py-1 text-sm font-medium text-gray-700 hover:text-primary">
+          <span id="lang-toggle-mobile">EN</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Main Content Area with iframe -->
+    <main id="main-content" class="flex-1 lg:ml-64" role="main">
+      <iframe id="content" class="w-full h-full border-0 mt-16 lg:mt-0" src="screens/dashboard.html" title="Application content" aria-label="Main application screen"></iframe>
+    </main>
+  </div>
+
+  <!-- Hash Routing Script -->
+  <script>
+    // Initialize route on page load
+    function initRoute() {
+      const hash = window.location.hash || '#/dashboard';
+      const route = hash.replace('#/', '');
+      const iframe = document.getElementById('content');
+
+      // Map routes to screen files
+      const routeMap = {
+        'dashboard': 'screens/dashboard.html',
+        'login': 'screens/auth-login.html',
+        'register': 'screens/auth-register.html',
+        'kyc': 'screens/auth-kyc.html',
+        'allocate/select': 'screens/allocate-step1.html',
+        'allocate/amount': 'screens/allocate-step2.html',
+        'allocate/confirm': 'screens/allocate-step3.html',
+        'history': 'screens/history.html',
+        'settings': 'screens/settings.html',
+        'settings/profile': 'screens/settings-profile.html',
+        'settings/security': 'screens/settings-security.html',
+        'settings/banks': 'screens/settings-banks.html',
+        'deposit': 'screens/banking-deposit.html',
+        'withdraw': 'screens/banking-withdraw.html'
+      };
+
+      // Handle strategy details with ID parameter
+      if (route.startsWith('strategy/')) {
+        iframe.src = 'screens/strategy-details.html' + hash;
+      } else {
+        iframe.src = routeMap[route] || 'screens/dashboard.html';
+      }
+
+      // Update active nav link
+      document.querySelectorAll('.nav-link').forEach(link => {
+        link.classList.remove('bg-gray-100', 'font-semibold');
+      });
+      const activeLink = document.querySelector(`a[href="${hash}"]`);
+      if (activeLink) {
+        activeLink.classList.add('bg-gray-100', 'font-semibold');
+      }
+    }
+
+    // Listen for hash changes
+    window.addEventListener('hashchange', initRoute);
+
+    // Initialize on load
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initRoute);
+    } else {
+      initRoute();
+    }
+
+    // Language toggle function (T037 - Language toggle across all screens)
+    function toggleLanguage() {
+      const currentLang = localStorage.getItem('lang') || 'en';
+      const newLang = currentLang === 'en' ? 'zh' : 'en';
+      localStorage.setItem('lang', newLang);
+
+      // Update nav labels
+      updateNavLanguage();
+
+      // Reload iframe to reflect language change
+      const iframe = document.getElementById('content');
+      iframe.src = iframe.src; // Force reload
+    }
+
+    // Mobile sidebar toggle (T039 - Responsive sidebar)
+    function toggleMobileSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      const backdrop = document.getElementById('sidebar-backdrop');
+
+      // Toggle sidebar visibility
+      if (sidebar.classList.contains('hidden')) {
+        // Show sidebar
+        sidebar.classList.remove('hidden');
+        sidebar.classList.add('fixed', 'inset-y-0', 'left-0', 'z-50', 'w-64');
+        backdrop.classList.remove('hidden');
+      } else {
+        // Hide sidebar
+        sidebar.classList.add('hidden');
+        sidebar.classList.remove('fixed', 'inset-y-0', 'left-0', 'z-50', 'w-64');
+        backdrop.classList.add('hidden');
+      }
+    }
+
+    // Initialize language toggle display and update nav labels
+    function updateNavLanguage() {
+      const currentLang = localStorage.getItem('lang') || 'en';
+
+      // Update language toggle buttons
+      document.getElementById('lang-toggle').textContent = currentLang === 'en' ? 'EN' : '简体中文';
+      document.getElementById('lang-toggle-mobile').textContent = currentLang === 'en' ? 'EN' : '简体中文';
+
+      // Update navigation labels (T037 - Language toggle)
+      const translations = {
+        en: {
+          dashboard: 'Dashboard',
+          allocate: 'Allocate Funds',
+          history: 'Transaction History',
+          settings: 'Settings'
+        },
+        zh: {
+          dashboard: '仪表板',
+          allocate: '分配资金',
+          history: '交易历史',
+          settings: '设置'
+        }
+      };
+
+      document.getElementById('nav-dashboard').textContent = translations[currentLang].dashboard;
+      document.getElementById('nav-allocate').textContent = translations[currentLang].allocate;
+      document.getElementById('nav-history').textContent = translations[currentLang].history;
+      document.getElementById('nav-settings').textContent = translations[currentLang].settings;
+    }
+
+    // Initialize on load
+    updateNavLanguage();
+
+    // Listen for language changes from iframe content
+    window.addEventListener('storage', (e) => {
+      if (e.key === 'lang') {
+        updateNavLanguage();
+      }
+    });
+
+    // Keyboard navigation support (T040 - Accessibility)
+    document.addEventListener('keydown', (e) => {
+      // Escape key closes mobile sidebar
+      if (e.key === 'Escape') {
+        const sidebar = document.getElementById('sidebar');
+        const backdrop = document.getElementById('sidebar-backdrop');
+        if (!sidebar.classList.contains('hidden')) {
+          toggleMobileSidebar();
+        }
+      }
+    });
+
+    // Trap focus in mobile sidebar when open
+    document.getElementById('sidebar').addEventListener('keydown', (e) => {
+      if (e.key === 'Tab') {
+        const sidebar = document.getElementById('sidebar');
+        if (sidebar.classList.contains('hidden')) return;
+
+        const focusableElements = sidebar.querySelectorAll('a, button');
+        const firstElement = focusableElements[0];
+        const lastElement = focusableElements[focusableElements.length - 1];
+
+        if (e.shiftKey && document.activeElement === firstElement) {
+          e.preventDefault();
+          lastElement.focus();
+        } else if (!e.shiftKey && document.activeElement === lastElement) {
+          e.preventDefault();
+          firstElement.focus();
+        }
+      }
+    });
+  </script>
+</body>
+</html>
