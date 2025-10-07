@@ -91,59 +91,73 @@
         </div>
       `;
 
-      // Allocation history table
+      // Allocation history table with responsive design
       const allocationTableHtml = `
-        <div class="bg-white rounded-lg p-6 shadow-sm border border-gray-200 mb-8">
-          <h2 class="text-lg font-semibold text-gray-900 mb-4">${t('strategy.allocationHistory')}</h2>
-          ${DataTable({
-            columns: [
-              { key: 'dateFormatted', label: t('strategy.date'), width: '25%' },
-              { key: 'action', label: t('strategy.action'), width: '25%' },
-              { key: 'amountFormatted', label: t('strategy.amount'), width: '25%' },
-              { key: 'balanceFormatted', label: t('strategy.balance'), width: '25%' }
-            ],
-            rows: strategy.allocationHistory.map(h => ({
-              dateFormatted: new Date(h.date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }),
-              action: h.action === 'allocated' ? t('strategy.allocated') : t('strategy.withdrawn'),
-              amountFormatted: formatCurrency(h.amount),
-              balanceFormatted: formatCurrency(h.balance)
-            }))
-          })}
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 mb-8 overflow-hidden">
+          <div class="p-4 md:p-6 border-b border-gray-200">
+            <h2 class="text-xl font-semibold text-gray-900">Allocation History</h2>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full">
+              <thead class="bg-gray-50">
+                <tr>
+                  <th scope="col" class="px-4 py-3 text-left text-sm font-semibold text-gray-600">Date</th>
+                  <th scope="col" class="px-4 py-3 text-left text-sm font-semibold text-gray-600">Action</th>
+                  <th scope="col" class="px-4 py-3 text-right text-sm font-semibold text-gray-600">Amount</th>
+                </tr>
+              </thead>
+              <tbody class="bg-white divide-y divide-gray-200">
+                ${strategy.allocationHistory.map((h, index) => `
+                  <tr class="${index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}">
+                    <td class="px-4 py-4 text-sm text-gray-900 whitespace-nowrap">
+                      ${new Date(h.date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
+                    </td>
+                    <td class="px-4 py-4 text-sm text-gray-900 whitespace-nowrap">
+                      ${h.action === 'allocated' ? t('strategy.allocated') : t('strategy.withdrawn')}
+                    </td>
+                    <td class="px-4 py-4 text-sm text-gray-900 text-right font-semibold whitespace-nowrap">
+                      ${formatCurrency(h.amount)}
+                    </td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          </div>
         </div>
       `;
 
-      // Additional info
+      // Additional info with improved layout
       const additionalInfoHtml = `
         <div class="bg-white rounded-lg p-6 shadow-sm border border-gray-200 mb-8">
-          <h2 class="text-lg font-semibold text-gray-900 mb-4">Strategy Details</h2>
-          <dl class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <h2 class="text-xl font-semibold text-gray-900 mb-6">Strategy Details</h2>
+          <dl>
             <div>
-              <dt class="text-sm font-medium text-gray-600">Risk Level</dt>
-              <dd class="text-sm text-gray-900 mt-1">${strategy.riskLevel}</dd>
+              <dt>Risk Level</dt>
+              <dd>${strategy.riskLevel}</dd>
             </div>
             <div>
-              <dt class="text-sm font-medium text-gray-600">Minimum Investment</dt>
-              <dd class="text-sm text-gray-900 mt-1">${formatCurrency(strategy.minInvestment)}</dd>
+              <dt>Minimum Investment</dt>
+              <dd>${formatCurrency(strategy.minimumInvestment || strategy.minInvestment)}</dd>
             </div>
             <div>
-              <dt class="text-sm font-medium text-gray-600">Current Allocation</dt>
-              <dd class="text-sm text-gray-900 mt-1">${formatCurrency(strategy.allocatedAmount)}</dd>
+              <dt>Current Allocation</dt>
+              <dd>${formatCurrency(strategy.allocatedAmount)}</dd>
             </div>
             <div>
-              <dt class="text-sm font-medium text-gray-600">${t('strategy.maxDrawdown')}</dt>
-              <dd class="text-sm text-gray-900 mt-1">${formatPercentage(strategy.maxDrawdown)}</dd>
+              <dt>Max Drawdown</dt>
+              <dd>${formatPercentage(strategy.maxDrawdown)}</dd>
             </div>
           </dl>
         </div>
       `;
 
-      // CTAs
+      // CTAs with responsive layout and centered text
       const ctasHtml = `
-        <div class="flex gap-4">
-          <a href="#/allocate/select" class="px-6 py-3 bg-accent text-white font-semibold rounded-lg hover:bg-accent/90 focus:outline-none focus:ring-2 focus:ring-accent transition-colors">
+        <div class="flex flex-col sm:flex-row gap-3 sm:gap-4">
+          <a href="#/allocate/select" class="flex-1 px-6 py-3 bg-accent text-white text-center font-semibold rounded-lg hover:bg-accent/90 focus:outline-none focus:ring-2 focus:ring-accent transition-colors">
             Allocate More Funds
           </a>
-          <button onclick="alert('Withdraw functionality coming soon')" class="px-6 py-3 bg-white text-primary font-semibold rounded-lg border-2 border-primary hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-accent transition-colors">
+          <button onclick="alert('Withdraw functionality coming soon')" class="flex-1 px-6 py-3 bg-white text-primary text-center font-semibold rounded-lg border-2 border-primary hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-accent transition-colors">
             Withdraw Funds
           </button>
         </div>
